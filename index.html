@@ -4,299 +4,327 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Steezy Sound</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
   <style>
-    :root {
-      --black: #080808;
-      --cream: #f0ead6;
-      --amber: #e8a020;
-      --amber-dim: #7a5010;
-      --grain-opacity: 0.045;
-    }
-
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      background: var(--black);
-      color: var(--cream);
-      font-family: 'DM Mono', monospace;
-      overflow: hidden;
-    }
-
-    /* Grain overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      opacity: var(--grain-opacity);
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    /* Radial glow behind content */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(232, 160, 32, 0.07) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .scene {
+    /* ─── HERO ─────────────────────────────────────────── */
+    .hero {
       position: relative;
-      z-index: 1;
       height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0;
+      overflow: hidden;
     }
 
-    /* Top label strip */
-    .label-strip {
-      position: absolute;
-      top: 2.2rem;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 2.5rem;
-      font-size: 0.6rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--amber-dim);
-      opacity: 0;
-      animation: fadeUp 0.8s ease 1.6s forwards;
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('media/landing.jpg') center/cover no-repeat;
+      filter: brightness(0.26);
+      z-index: 0;
     }
 
-    /* Equalizer */
-    .eq {
-      display: flex;
-      align-items: flex-end;
-      gap: 4px;
-      height: 48px;
-      margin-bottom: 2.8rem;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 0.4s forwards;
+    .hero-content {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center;
+      padding: 0 2rem;
     }
 
-    .bar {
-      width: 4px;
-      border-radius: 2px 2px 0 0;
-      background: var(--amber);
-      transform-origin: bottom;
-      animation: pulse var(--dur) ease-in-out infinite alternate;
-      animation-delay: var(--delay);
+    .hero-frog {
+      width: clamp(90px, 14vw, 150px);
+      height: auto; object-fit: contain;
+      animation: frog-hero 2.2s ease-in-out infinite;
+      filter: drop-shadow(0 0 24px rgba(0,240,208,0.55));
+      margin-bottom: 1.8rem;
     }
 
-    @keyframes pulse {
-      from { transform: scaleY(var(--low)); opacity: 0.5; }
-      to   { transform: scaleY(var(--high)); opacity: 1; }
+    @keyframes frog-hero {
+      0%, 100% { transform: translateY(0) rotate(-5deg) scaleX(1); }
+      45%       { transform: translateY(-20px) rotate(5deg) scaleX(0.93); }
+      50%       { transform: translateY(-22px) rotate(5deg) scaleX(0.92); }
+      55%       { transform: translateY(-20px) rotate(5deg) scaleX(0.93); }
     }
 
-    /* Headline */
-    .welcome {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.72rem;
-      font-style: italic;
-      font-weight: 300;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 0.5rem;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 0.7s forwards;
-    }
+    .hero-sup { display: none; }
 
-    .wordmark {
+    .hero-wordmark {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5rem, 14vw, 11rem);
-      line-height: 0.88;
-      letter-spacing: 0.04em;
-      text-align: center;
-      color: var(--cream);
-      opacity: 0;
-      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+      font-size: clamp(5.5rem, 17vw, 14rem);
+      line-height: 0.84; letter-spacing: 0.04em;
+      color: var(--cream); margin-bottom: 0.6rem;
     }
 
-    .wordmark span {
-      display: block;
-      color: var(--amber);
+    .hero-wordmark span { display: block; color: var(--amber); }
+
+    .hero-discipline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.2rem, 3.5vw, 2.4rem);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(240,234,214,0.7);
+      margin-bottom: 1.8rem;
     }
 
-    /* Divider line */
-    .rule {
-      width: 1px;
-      height: 48px;
-      background: linear-gradient(to bottom, var(--amber), transparent);
-      margin: 2rem 0 1.6rem;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 1.2s forwards;
+    .hero-tagline {
+      font-size: 0.9rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(240,234,214,0.75);
+      margin-bottom: 2.5rem;
     }
 
-    .tagline {
-      font-size: 0.62rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--cream);
-      opacity: 0;
-      animation: fadeUp 0.6s ease 1.4s forwards;
-    }
-
-    /* Bottom strip */
-    .bottom-strip {
-      position: absolute;
-      bottom: 2.2rem;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      padding: 0 2.5rem;
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase;
       color: var(--amber-dim);
-      opacity: 0;
-      animation: fadeUp 0.8s ease 1.8s forwards;
+      animation: scroll-bob 2.2s ease-in-out infinite;
     }
 
-    /* Horizontal accent lines */
-    .accent-line {
-      position: absolute;
-      left: 2.5rem;
-      right: 2.5rem;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--amber-dim) 30%, var(--amber-dim) 70%, transparent);
-      opacity: 0;
-      animation: fadeIn 1s ease 1.5s forwards;
-    }
-    .accent-line.top    { top: 4.5rem; }
-    .accent-line.bottom { bottom: 4.5rem; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
+    @keyframes scroll-bob {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    .hero-scroll svg {
+      width: 14px; height: 14px;
+      stroke: var(--amber-dim); fill: none; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
     }
 
-    /* Vinyl record decoration — far right */
-    .vinyl {
-      position: fixed;
-      right: -120px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 340px;
-      height: 340px;
-      border-radius: 50%;
-      background: conic-gradient(
-        from 0deg,
-        #111 0deg, #1a1a1a 5deg, #111 10deg, #1a1a1a 15deg,
-        #111 20deg, #1a1a1a 25deg, #111 30deg, #1a1a1a 35deg,
-        #111 40deg, #1a1a1a 45deg, #111 50deg, #1a1a1a 55deg,
-        #111 60deg, #1a1a1a 65deg, #111 70deg, #1a1a1a 75deg,
-        #111 80deg, #1a1a1a 85deg, #111 90deg, #1a1a1a 95deg,
-        #111 100deg, #1a1a1a 105deg, #111 110deg, #1a1a1a 115deg,
-        #111 120deg, #1a1a1a 125deg, #111 130deg, #1a1a1a 135deg,
-        #111 140deg, #1a1a1a 145deg, #111 150deg, #1a1a1a 155deg,
-        #111 160deg, #1a1a1a 165deg, #111 170deg, #1a1a1a 175deg,
-        #111 180deg, #1a1a1a 185deg, #111 190deg, #1a1a1a 195deg,
-        #111 200deg, #1a1a1a 205deg, #111 210deg, #1a1a1a 215deg,
-        #111 220deg, #1a1a1a 225deg, #111 230deg, #1a1a1a 235deg,
-        #111 240deg, #1a1a1a 245deg, #111 250deg, #1a1a1a 255deg,
-        #111 260deg, #1a1a1a 265deg, #111 270deg, #1a1a1a 275deg,
-        #111 280deg, #1a1a1a 285deg, #111 290deg, #1a1a1a 295deg,
-        #111 300deg, #1a1a1a 305deg, #111 310deg, #1a1a1a 315deg,
-        #111 320deg, #1a1a1a 325deg, #111 330deg, #1a1a1a 335deg,
-        #111 340deg, #1a1a1a 345deg, #111 350deg, #1a1a1a 355deg, #111 360deg
-      );
-      opacity: 0;
-      animation: fadeIn 1.2s ease 0.3s forwards, spin 18s linear infinite;
-      box-shadow: 0 0 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.5);
-    }
-    .vinyl::after {
-      content: '';
-      position: absolute;
-      inset: 38%;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--amber) 0%, #a06010 60%, #604008 100%);
-      box-shadow: 0 0 12px rgba(232, 160, 32, 0.3);
+    /* ─── SERVICES GRID ─────────────────────────────────── */
+    .services {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
     }
 
-    @keyframes spin {
-      to { transform: translateY(-50%) rotate(360deg); }
+    .service-card {
+      position: relative;
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2.5rem 2rem;
+      text-decoration: none;
+      overflow: hidden;
+      color: var(--cream);
     }
 
-    /* Mirror vinyl left */
-    .vinyl-left {
-      left: -150px;
-      right: auto;
-      opacity: 0.4;
-      animation: fadeIn 1.2s ease 0.5s forwards, spin 24s linear infinite reverse;
-      width: 260px;
-      height: 260px;
+    .service-card:not(:last-child) {
+      border-right: 1px solid rgba(232,160,32,0.07);
+    }
+
+    .card-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: brightness(0.28);
+      transition: filter 0.5s ease, transform 0.7s ease;
+      z-index: 0;
+    }
+
+    .card-live .card-bg {
+      background-image: url('media/closeup.jpg');
+      background-position: center top;
+    }
+
+    .card-studio .card-bg {
+      background-image: url('media/closeup.jpg');
+      background-position: center;
+    }
+
+    .card-promo .card-bg {
+      background-image: url('media/landing.jpg');
+    }
+
+    .service-card:hover .card-bg {
+      filter: brightness(0.42);
+      transform: scale(1.04);
+    }
+
+    /* Per-card color tint */
+    .card-tint {
+      position: absolute; inset: 0; z-index: 1;
+      transition: opacity 0.4s;
+    }
+    .card-live   .card-tint { background: rgba(0,240,208,0.06); }
+    .card-studio .card-tint { background: rgba(232,160,32,0.1); }
+    .card-promo  .card-tint { background: rgba(200,60,60,0.05); }
+
+    /* Bottom gradient so text is always readable */
+    .card-grad {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 65%;
+      background: linear-gradient(to top, rgba(8,8,8,0.82), transparent);
+      z-index: 2;
+    }
+
+    .card-body {
+      position: relative; z-index: 3;
+    }
+
+    .card-num {
+      font-size: 0.62rem; letter-spacing: 0.28em;
+      color: var(--amber); margin-bottom: 0.55rem;
+    }
+
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 3vw, 3.2rem);
+      line-height: 1; letter-spacing: 0.04em;
+      margin-bottom: 0.65rem;
+    }
+
+    .card-hook {
+      font-size: 0.84rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(240,234,214,0.8); margin-bottom: 1.4rem;
+    }
+
+    .card-link {
+      display: inline-flex; align-items: center; gap: 0.5em;
+      font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--amber); transition: gap 0.22s;
+    }
+
+    .service-card:hover .card-link { gap: 1em; }
+
+    /* ─── MOBILE ────────────────────────────────────────── */
+    @media (max-width: 800px) {
+      .services {
+        grid-template-columns: 1fr;
+      }
+      .service-card {
+        height: 55vh;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(232,160,32,0.07);
+      }
+      .service-card:last-child { border-bottom: none; }
     }
   </style>
 </head>
 <body>
-  <div class="vinyl"></div>
-  <div class="vinyl vinyl-left"></div>
 
-  <div class="scene">
-    <div class="label-strip">
-      <span>Est. 2025</span>
-      <span>steezysound.com</span>
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <img src="media/logo.png" alt="Steezy Sound frog logo" class="nav-frog" />
+      <span class="nav-wordmark">Steezy Sound</span>
+    </a>
+    <div class="nav-links">
+      <div class="nav-dropdown">
+        <button class="nav-link" aria-haspopup="true" aria-expanded="false">Services ▾</button>
+        <div class="dropdown-menu">
+          <a href="live-recording.html" class="dropdown-item">Live Shows</a>
+          <a href="studio.html" class="dropdown-item">Studio Recording</a>
+          <a href="promo-video.html" class="dropdown-item">Promo Videos</a>
+        </div>
+      </div>
+      <a href="rig.html" class="nav-link">The Rig</a>
+      <a href="menu.html" class="nav-link">The Menu</a>
     </div>
+  </nav>
 
-    <div class="accent-line top"></div>
-
-    <div class="eq" id="eq"></div>
-
-    <p class="welcome">Welcome to</p>
-
-    <h1 class="wordmark">
-      Steezy<span>Sound</span>
-    </h1>
-
-    <div class="rule"></div>
-
-    <p class="tagline">Something is coming</p>
-
-    <div class="accent-line bottom"></div>
-
-    <div class="bottom-strip">
-      <span>&mdash;&nbsp; Feel the vibe &nbsp;&mdash;</span>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <img src="media/logo.png" alt="" class="hero-frog" aria-hidden="true" />
+      <h1 class="hero-wordmark">Steezy<span>Sound</span></h1>
+      <p class="hero-discipline">Audio &amp; Video Production</p>
+      <p class="hero-tagline">We capture the energy. You own the moment.</p>
+      <a href="mailto:stefanturkowski@gmail.com" class="btn-book">Book via email &nbsp;→</a>
     </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <svg viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4" /></svg>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" aria-label="Services">
+    <a href="live-recording.html" class="service-card card-live">
+      <div class="card-bg"></div>
+      <div class="card-tint"></div>
+      <div class="card-grad"></div>
+      <div class="card-body">
+        <h2 class="card-title">Live Shows</h2>
+        <p class="card-hook">Full PA + raw or mastered audio. From $500.</p>
+        <span class="card-link">View service &nbsp;→</span>
+      </div>
+    </a>
+
+    <a href="studio.html" class="service-card card-studio">
+      <div class="card-bg"></div>
+      <div class="card-tint"></div>
+      <div class="card-grad"></div>
+      <div class="card-body">
+        <h2 class="card-title">Studio Recording</h2>
+        <p class="card-hook">Songs mixed & mastered for release. $100/song.</p>
+        <span class="card-link">View service &nbsp;→</span>
+      </div>
+    </a>
+
+    <a href="promo-video.html" class="service-card card-promo">
+      <div class="card-bg"></div>
+      <div class="card-tint"></div>
+      <div class="card-grad"></div>
+      <div class="card-body">
+        <h2 class="card-title">Promo Videos</h2>
+        <p class="card-hook">Multi-cam video. YouTube $100/song · Instagram $100/reel.</p>
+        <span class="card-link">View service &nbsp;→</span>
+      </div>
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <span>Steezy Sound &copy; 2025</span>
+    <!-- REPLACE: update email address -->
+    <a href="mailto:stefanturkowski@gmail.com">stefanturkowski@gmail.com</a>
+    <span>steezysound.com</span>
+  </footer>
+
+  <!-- PLAY HINT -->
+  <div class="play-hint" id="play-hint" role="button" tabindex="0" aria-label="Play background music">
+    ▶ &nbsp;Play music
   </div>
 
   <script>
-    const eq = document.getElementById('eq');
-    const barCount = 18;
-    const bars = [];
+    // ── Audio autoplay at 20% volume ──────────────────────
+    const audio = new Audio('media/music.mp3');
+    audio.volume = 0.2;
+    audio.loop   = true;
 
-    for (let i = 0; i < barCount; i++) {
-      const bar = document.createElement('div');
-      bar.className = 'bar';
-      const low  = (0.15 + Math.random() * 0.2).toFixed(2);
-      const high = (0.55 + Math.random() * 0.45).toFixed(2);
-      const dur  = (0.5  + Math.random() * 0.9).toFixed(2);
-      const del  = (Math.random() * 0.8).toFixed(2);
-      bar.style.cssText = `--low:${low}; --high:${high}; --dur:${dur}s; --delay:${del}s; height:100%;`;
-      eq.appendChild(bar);
-      bars.push(bar);
+    const hint = document.getElementById('play-hint');
+
+    function tryPlay() {
+      return audio.play().then(() => { hint.style.display = 'none'; });
     }
+
+    tryPlay().catch(() => { hint.style.display = 'flex'; });
+
+    hint.addEventListener('click', () => tryPlay());
+    hint.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tryPlay(); }
+    });
+
+    // Unlock on first user interaction (covers most browser autoplay policies)
+    document.addEventListener('click', function unlock() {
+      if (audio.paused) tryPlay().catch(() => {});
+      document.removeEventListener('click', unlock, true);
+    }, true);
+
+    // ── Nav dropdown (mobile tap) ─────────────────────────
+    document.querySelectorAll('.nav-dropdown').forEach(dd => {
+      dd.querySelector('button')?.addEventListener('click', e => {
+        e.stopPropagation();
+        const open = dd.classList.toggle('open');
+        dd.querySelector('button').setAttribute('aria-expanded', open);
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(dd => {
+        dd.classList.remove('open');
+        dd.querySelector('button')?.setAttribute('aria-expanded', 'false');
+      });
+    });
   </script>
 </body>
 </html>

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu — Steezy Sound</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Full-page dark with very faint photo texture */
+    .menu-page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 110px;
+    }
+
+    .menu-bg {
+      position: fixed; inset: 0;
+      background: url('media/landing.jpg') center/cover no-repeat;
+      filter: brightness(0.08);
+      z-index: -1;
+    }
+
+    /* ─── HEADER ────────────────────────────────────────── */
+    .menu-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 4rem 3.5rem 2rem;
+      border-bottom: 1px solid rgba(232,160,32,0.12);
+    }
+
+    .menu-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 10rem);
+      line-height: 0.85;
+      letter-spacing: 0.04em;
+      color: var(--cream);
+    }
+
+    .menu-meta {
+      text-align: right;
+      padding-bottom: 0.5rem;
+    }
+
+    .menu-meta p {
+      font-size: 0.825rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber-dim);
+      line-height: 2;
+    }
+
+    /* ─── CALCULATOR ────────────────────────────────────── */
+    .calc-wrapper {
+      flex: 1;
+      padding: 0 3.5rem;
+    }
+
+    /* Preset selector */
+    .preset-bar {
+      padding: 2rem 0 1.5rem;
+      display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+    }
+
+    .preset-label {
+      font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--amber); flex-shrink: 0;
+    }
+
+    .preset-select {
+      background: rgba(232,160,32,0.06);
+      border: 1px solid rgba(232,160,32,0.25);
+      color: var(--cream);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem; letter-spacing: 0.12em;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e8a020' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .preset-select:hover, .preset-select:focus { border-color: var(--amber); outline: none; }
+    .preset-select option { background: #111; color: var(--cream); }
+
+    /* Line items */
+    .calc-items {
+      border-top: 1px solid rgba(232,160,32,0.12);
+    }
+
+    .calc-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.8rem 0;
+      border-bottom: 1px solid rgba(232,160,32,0.07);
+      cursor: pointer;
+      transition: background 0.15s;
+      user-select: none;
+    }
+
+    .calc-row:hover { background: rgba(232,160,32,0.02); }
+
+    .calc-row.selected { background: rgba(232,160,32,0.04); }
+    .calc-row.selected .row-name { color: var(--cream); }
+    .calc-row.selected .row-indicator { background: var(--amber); }
+    .calc-row.selected .row-price-unit { color: var(--amber); }
+
+    .row-left {
+      display: flex; align-items: center; gap: 1.5rem;
+    }
+
+    .row-indicator {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(240,234,214,0.15);
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .row-info { display: flex; flex-direction: column; gap: 0.35rem; }
+
+    .row-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      line-height: 1; letter-spacing: 0.04em;
+      color: rgba(240,234,214,0.45);
+      transition: color 0.2s;
+    }
+
+    .row-desc {
+      font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(240,234,214,0.5);
+    }
+
+    .row-right {
+      display: flex; align-items: center; gap: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .row-qty-wrap {
+      display: none; align-items: center; gap: 0.5rem;
+    }
+
+    .calc-row.selected .row-qty-wrap { display: flex; }
+
+    .row-qty-label {
+      font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(240,234,214,0.5);
+    }
+
+    .row-qty {
+      width: 3.5rem;
+      background: rgba(232,160,32,0.08);
+      border: 1px solid rgba(232,160,32,0.3);
+      color: var(--cream);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1rem; font-weight: 500;
+      text-align: center;
+      padding: 0.3rem 0.5rem;
+    }
+
+    .row-qty:focus { outline: 1px solid var(--amber); }
+
+    .row-price-unit {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1; letter-spacing: 0.03em;
+      color: rgba(240,234,214,0.25);
+      transition: color 0.2s;
+      text-align: right; min-width: 7rem;
+    }
+
+    .row-line-total {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      color: var(--amber); min-width: 5rem; text-align: right;
+      display: none;
+    }
+
+    .calc-row.selected .row-line-total { display: block; }
+
+    /* Sticky estimate bar */
+    .estimate-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 400;
+      background: rgba(8,8,8,0.97);
+      border-top: 1px solid rgba(232,160,32,0.25);
+      padding: 1rem 3.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+      backdrop-filter: blur(12px);
+    }
+
+    .estimate-label {
+      font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(240,234,214,0.5);
+    }
+
+    .estimate-total {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--amber); letter-spacing: 0.04em;
+    }
+
+    .estimate-actions {
+      display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+    }
+
+    .btn-copy {
+      background: none; border: 1px solid rgba(232,160,32,0.35);
+      color: var(--amber); font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.7rem 1.5rem; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-copy:hover { background: rgba(232,160,32,0.08); border-color: var(--amber); }
+
+    .btn-print {
+      background: none; border: none;
+      color: rgba(240,234,214,0.4); font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.7rem 0.5rem; cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .btn-print:hover { color: var(--cream); }
+
+    /* Extra bottom padding so last item isn't hidden by bar */
+    .calc-spacer { height: 5rem; }
+
+    /* Copy flash feedback */
+    .copy-feedback {
+      position: fixed; bottom: 5rem; right: 2rem; z-index: 500;
+      background: var(--amber); color: var(--black);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.6rem 1.2rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .copy-feedback.show { opacity: 1; }
+
+    /* ─── PRINT STYLES ──────────────────────────────────── */
+    @media print {
+      .nav, .menu-bg, .frog-corner, .estimate-bar, .preset-bar,
+      .menu-foot, .copy-feedback { display: none !important; }
+      .calc-wrapper { padding: 2rem; }
+      body { background: white; color: black; }
+      .row-name { color: black !important; }
+      .row-desc { color: #555 !important; }
+      .calc-row { border-bottom: 1px solid #ddd; }
+      .estimate-total, .row-price-unit, .row-line-total { color: black !important; }
+      .print-quote-header {
+        display: block !important;
+        font-family: monospace; font-size: 1rem;
+        margin-bottom: 2rem;
+        white-space: pre;
+      }
+    }
+
+    .print-quote-header { display: none; }
+
+    /* ─── FOOTER SECTION ────────────────────────────────── */
+    .menu-foot {
+      padding: 3rem 3.5rem;
+      border-top: 1px solid rgba(232,160,32,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .menu-foot-text {
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240,234,214,0.75);
+    }
+
+    /* ─── FROG WATERMARK ────────────────────────────────── */
+    .frog-corner {
+      position: fixed;
+      bottom: 6rem;
+      right: 2rem;
+      width: 80px;
+      opacity: 0.12;
+      animation: frog-nav 3.2s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(0,240,208,0.5));
+      pointer-events: none;
+    }
+
+    /* ─── MOBILE ────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .menu-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 3rem 1.5rem 1.5rem;
+        gap: 1rem;
+      }
+      .menu-meta { text-align: left; }
+      .calc-wrapper { padding: 0 1.5rem; }
+      .menu-foot  { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+      .estimate-bar { padding: 1rem 1.5rem; }
+      .row-right { flex-wrap: wrap; justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <img src="media/logo.png" alt="Steezy Sound" class="nav-frog" />
+      <span class="nav-wordmark">Steezy Sound</span>
+    </a>
+    <div class="nav-links">
+      <div class="nav-dropdown">
+        <button class="nav-link" aria-haspopup="true" aria-expanded="false">Services ▾</button>
+        <div class="dropdown-menu">
+          <a href="live-recording.html" class="dropdown-item">Live Shows</a>
+          <a href="studio.html" class="dropdown-item">Studio Recording</a>
+          <a href="promo-video.html" class="dropdown-item">Promo Videos</a>
+        </div>
+      </div>
+      <a href="rig.html" class="nav-link">The Rig</a>
+      <a href="menu.html" class="nav-link active">The Menu</a>
+    </div>
+  </nav>
+
+  <div class="menu-page">
+    <div class="menu-bg"></div>
+
+    <!-- HEADER -->
+    <div class="menu-header">
+      <h1 class="menu-title">The<br>Menu</h1>
+      <div class="menu-meta">
+        <p>Steezy Sound</p>
+        <p>Live Sound Events</p>
+        <p>steezysound.com</p>
+      </div>
+    </div>
+
+    <!-- CALCULATOR -->
+    <div class="calc-wrapper">
+
+      <!-- Preset dropdown -->
+      <div class="preset-bar">
+        <span class="preset-label">Start with a preset</span>
+        <select class="preset-select" id="preset-select">
+          <option value="custom">Custom — build from scratch</option>
+          <option value="pa">Just the PA — $500</option>
+          <option value="diy">Audio DIY — PA + rough mix</option>
+          <option value="release">Audio Release — PA + rough mix + mastering</option>
+          <option value="instagram">Instagram — PA + rough mix + 2 reels</option>
+          <option value="youtube">YouTube — PA + rough mix + 1 video</option>
+        </select>
+      </div>
+
+      <!-- Line items -->
+      <div class="calc-items" id="calc-items">
+
+        <div class="calc-row selected" id="row-pa" data-rate="500" data-unit="day">
+          <div class="row-left">
+            <div class="row-indicator"></div>
+            <div class="row-info">
+              <span class="row-name">Running the PA</span>
+              <span class="row-desc">Full setup, sound engineering, takedown · base rate</span>
+            </div>
+          </div>
+          <div class="row-right">
+            <div class="row-qty-wrap">
+              <span class="row-qty-label">Days</span>
+              <input class="row-qty" type="number" min="1" value="1" />
+            </div>
+            <span class="row-price-unit">$500<span style="font-size:0.5em;opacity:0.6">/day</span></span>
+            <span class="row-line-total"></span>
+          </div>
+        </div>
+
+        <div class="calc-row" id="row-rough" data-rate="50" data-unit="set">
+          <div class="row-left">
+            <div class="row-indicator"></div>
+            <div class="row-info">
+              <span class="row-name">Rough Mix + Raw Stems</span>
+              <span class="row-desc">Full set as one mixed MP3 · multitrack stems within 24hrs — included free with this</span>
+            </div>
+          </div>
+          <div class="row-right">
+            <div class="row-qty-wrap">
+              <span class="row-qty-label">Sets</span>
+              <input class="row-qty" type="number" min="1" value="1" />
+            </div>
+            <span class="row-price-unit">$50<span style="font-size:0.5em;opacity:0.6">/set</span></span>
+            <span class="row-line-total"></span>
+          </div>
+        </div>
+
+        <div class="calc-row" id="row-master" data-rate="100" data-unit="song">
+          <div class="row-left">
+            <div class="row-indicator"></div>
+            <div class="row-info">
+              <span class="row-name">Mixing &amp; Mastering</span>
+              <span class="row-desc">Individual WAV files per song · distribution-ready · delivered within a week</span>
+            </div>
+          </div>
+          <div class="row-right">
+            <div class="row-qty-wrap">
+              <span class="row-qty-label">Songs</span>
+              <input class="row-qty" type="number" min="1" value="1" />
+            </div>
+            <span class="row-price-unit">$100<span style="font-size:0.5em;opacity:0.6">/song</span></span>
+            <span class="row-line-total"></span>
+          </div>
+        </div>
+
+        <div class="calc-row" id="row-youtube" data-rate="100" data-unit="song">
+          <div class="row-left">
+            <div class="row-indicator"></div>
+            <div class="row-info">
+              <span class="row-name">YouTube Video</span>
+              <span class="row-desc">Horizontal multi-cam · mixed audio · titles and transitions · delivered within a week</span>
+            </div>
+          </div>
+          <div class="row-right">
+            <div class="row-qty-wrap">
+              <span class="row-qty-label">Songs</span>
+              <input class="row-qty" type="number" min="1" value="1" />
+            </div>
+            <span class="row-price-unit">$100<span style="font-size:0.5em;opacity:0.6">/song</span></span>
+            <span class="row-line-total"></span>
+          </div>
+        </div>
+
+        <div class="calc-row" id="row-instagram" data-rate="100" data-unit="reel">
+          <div class="row-left">
+            <div class="row-indicator"></div>
+            <div class="row-info">
+              <span class="row-name">Instagram Reel</span>
+              <span class="row-desc">30 sec vertical · mixed audio · lyric subtitles and effects · delivered within a week</span>
+            </div>
+          </div>
+          <div class="row-right">
+            <div class="row-qty-wrap">
+              <span class="row-qty-label">Reels</span>
+              <input class="row-qty" type="number" min="1" value="1" />
+            </div>
+            <span class="row-price-unit">$100<span style="font-size:0.5em;opacity:0.6">/reel</span></span>
+            <span class="row-line-total"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="calc-spacer"></div>
+    </div>
+
+    <!-- MENU FOOTER -->
+    <div class="menu-foot">
+      <p class="menu-foot-text">Add-ons can be decided after the show · rough mix and stems within 24 hrs · produced songs and videos within a week</p>
+      <!-- REPLACE: update email address -->
+      <a href="mailto:stefanturkowski@gmail.com" class="btn-book">
+        Get in touch &nbsp;→
+      </a>
+    </div>
+
+    <!-- SITE FOOTER -->
+    <footer class="site-footer">
+      <span>Steezy Sound &copy; 2025</span>
+      <a href="mailto:stefanturkowski@gmail.com">stefanturkowski@gmail.com</a>
+      <span>steezysound.com</span>
+    </footer>
+  </div>
+
+  <!-- Frog watermark -->
+  <img src="media/logo.png" alt="" class="frog-corner" aria-hidden="true" />
+
+  <!-- Sticky estimate bar -->
+  <div class="estimate-bar" id="estimate-bar">
+    <div>
+      <div class="estimate-label">Your estimate</div>
+      <div class="estimate-total" id="estimate-total">$0</div>
+    </div>
+    <div class="estimate-actions">
+      <button class="btn-copy" id="btn-copy">Copy quote</button>
+      <button class="btn-print" id="btn-print">Print / Save PDF</button>
+      <a href="mailto:stefanturkowski@gmail.com" class="btn-book" style="margin:0">Book via email →</a>
+    </div>
+  </div>
+
+  <!-- Copy feedback toast -->
+  <div class="copy-feedback" id="copy-feedback">Copied!</div>
+
+  <script>
+    // ── Nav dropdown ──────────────────────────────────────
+    document.querySelectorAll('.nav-dropdown').forEach(dd => {
+      dd.querySelector('button')?.addEventListener('click', e => {
+        e.stopPropagation();
+        const open = dd.classList.toggle('open');
+        dd.querySelector('button').setAttribute('aria-expanded', open);
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(dd => {
+        dd.classList.remove('open');
+        dd.querySelector('button')?.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // ── Calculator ────────────────────────────────────────
+    const ITEMS = [
+      { id: 'pa',        name: 'Running the PA',         unit: 'day',  rate: 500 },
+      { id: 'rough',     name: 'Rough Mix + Raw Stems',  unit: 'set',  rate: 50  },
+      { id: 'master',    name: 'Mixing & Mastering',     unit: 'song', rate: 100 },
+      { id: 'youtube',   name: 'YouTube Video',          unit: 'song', rate: 100 },
+      { id: 'instagram', name: 'Instagram Reel',         unit: 'reel', rate: 100 },
+    ];
+
+    const PRESETS = {
+      custom:    {},
+      pa:        { pa: 1 },
+      diy:       { pa: 1, rough: 1 },
+      release:   { pa: 1, rough: 1, master: 3 },
+      instagram: { pa: 1, rough: 1, instagram: 2 },
+      youtube:   { pa: 1, rough: 1, youtube: 1 },
+    };
+
+    function getRow(id)   { return document.getElementById('row-' + id); }
+    function getQty(id)   { return parseInt(getRow(id).querySelector('.row-qty').value) || 1; }
+    function isOn(id)     { return getRow(id).classList.contains('selected'); }
+    function setOn(id, on){ getRow(id).classList.toggle('selected', on); }
+
+    function updateTotal() {
+      let total = 0;
+      ITEMS.forEach(item => {
+        const row = getRow(item.id);
+        const on  = isOn(item.id);
+        const qty = parseInt(row.querySelector('.row-qty').value) || 1;
+        const line = on ? item.rate * qty : 0;
+        row.querySelector('.row-line-total').textContent = on ? '$' + line.toLocaleString() : '';
+        total += line;
+      });
+      document.getElementById('estimate-total').textContent = '$' + total.toLocaleString();
+      return total;
+    }
+
+    // Items that require Rough Mix as a precursor
+    const ROUGH_DEPS = ['master', 'youtube', 'instagram'];
+
+    function ensureRough() {
+      if (!isOn('rough')) {
+        setOn('rough', true);
+        getRow('rough').querySelector('.row-qty').value = 1;
+      }
+    }
+
+    // Toggle rows
+    ITEMS.forEach(item => {
+      const row = getRow(item.id);
+      row.addEventListener('click', e => {
+        if (e.target.tagName === 'INPUT') return; // don't toggle when clicking qty
+        const nowOn = !isOn(item.id);
+        setOn(item.id, nowOn);
+        if (nowOn && ROUGH_DEPS.includes(item.id)) ensureRough();
+        document.getElementById('preset-select').value = 'custom';
+        updateTotal();
+      });
+      row.querySelector('.row-qty').addEventListener('input', () => {
+        if (!isOn(item.id)) setOn(item.id, true);
+        if (ROUGH_DEPS.includes(item.id)) ensureRough();
+        updateTotal();
+      });
+      // Stop click on qty from bubbling to row toggle
+      row.querySelector('.row-qty').addEventListener('click', e => e.stopPropagation());
+    });
+
+    // Presets
+    document.getElementById('preset-select').addEventListener('change', function() {
+      const preset = PRESETS[this.value] || {};
+      ITEMS.forEach(item => {
+        const row = getRow(item.id);
+        const qty = preset[item.id];
+        if (qty) {
+          setOn(item.id, true);
+          row.querySelector('.row-qty').value = qty;
+        } else {
+          setOn(item.id, false);
+          row.querySelector('.row-qty').value = 1;
+        }
+      });
+      updateTotal();
+    });
+
+    // Copy quote
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const lines = [];
+      const width = 36;
+      lines.push('Steezy Sound — Quote');
+      lines.push('─'.repeat(width));
+      let total = 0;
+      ITEMS.forEach(item => {
+        if (!isOn(item.id)) return;
+        const qty  = getQty(item.id);
+        const line = item.rate * qty;
+        total += line;
+        const label = item.name + (qty > 1 ? ' × ' + qty + ' ' + item.unit + (qty > 1 ? 's' : '') : '');
+        const price = '$' + line.toLocaleString();
+        const pad   = width - label.length - price.length;
+        lines.push(label + ' '.repeat(Math.max(1, pad)) + price);
+      });
+      lines.push('─'.repeat(width));
+      lines.push('Total' + ' '.repeat(width - 5 - ('$' + total.toLocaleString()).length) + '$' + total.toLocaleString());
+      lines.push('');
+      lines.push('Book: stefanturkowski@gmail.com');
+      lines.push('steezysound.com');
+
+      navigator.clipboard.writeText(lines.join('\n')).then(() => {
+        const fb = document.getElementById('copy-feedback');
+        fb.classList.add('show');
+        setTimeout(() => fb.classList.remove('show'), 2000);
+      }).catch(() => {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = lines.join('\n');
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        const fb = document.getElementById('copy-feedback');
+        fb.classList.add('show');
+        setTimeout(() => fb.classList.remove('show'), 2000);
+      });
+    });
+
+    // Print
+    document.getElementById('btn-print').addEventListener('click', () => window.print());
+
+    // Init with PA on by default (minimum 1 day)
+    setOn('pa', true);
+    updateTotal();
+  </script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Rig — Steezy Sound</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+
+    /* ─── PAGE ──────────────────────────────────────────── */
+    .rig-page {
+      min-height: 100vh;
+      padding-top: 110px;
+    }
+
+    .rig-bg {
+      position: fixed; inset: 0;
+      background: url('media/closeup.jpg') 60% center / cover no-repeat;
+      filter: brightness(0.07) sepia(0.4);
+      z-index: -1;
+    }
+
+    /* ─── HERO ──────────────────────────────────────────── */
+    .rig-hero {
+      padding: 5rem 3.5rem 3rem;
+      border-bottom: 1px solid rgba(232,160,32,0.12);
+      position: relative;
+    }
+
+    .rig-eyebrow {
+      font-size: 0.825rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--amber); margin-bottom: 1rem;
+    }
+
+    .rig-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 15vw, 13rem);
+      line-height: 0.82; letter-spacing: 0.04em;
+      color: var(--cream);
+    }
+
+    .rig-title span { color: var(--amber); }
+
+    .rig-sub {
+      margin-top: 1.5rem;
+      font-size: 0.9rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(240,234,214,0.8); max-width: 560px;
+    }
+
+    /* ─── STATS BAR ─────────────────────────────────────── */
+    .stats-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid rgba(232,160,32,0.12);
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      flex: 1; min-width: 130px;
+      padding: 2rem 2.5rem;
+      border-right: 1px solid rgba(232,160,32,0.1);
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 1; letter-spacing: 0.04em;
+      color: var(--amber);
+    }
+
+    .stat-label {
+      font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(240,234,214,0.75);
+    }
+
+    /* ─── GEAR SECTIONS ─────────────────────────────────── */
+    .gear-section {
+      padding: 0 3.5rem;
+      border-bottom: 1px solid rgba(232,160,32,0.08);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 2rem;
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid rgba(232,160,32,0.06);
+      margin-bottom: 0;
+    }
+
+    .section-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 8vw, 7rem);
+      line-height: 1; letter-spacing: 0.04em;
+      color: rgba(240,234,214,0.06);
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      text-transform: uppercase;
+    }
+
+    /* ─── GEAR ITEMS ────────────────────────────────────── */
+    .gear-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 0;
+    }
+
+    .gear-item {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid rgba(232,160,32,0.06);
+      border-right: 1px solid rgba(232,160,32,0.06);
+      padding-right: 2rem;
+      padding-left: 0;
+    }
+
+    .gear-item:nth-child(2n) {
+      padding-left: 2rem;
+      padding-right: 0;
+      border-right: none;
+    }
+
+    .gear-count {
+      font-size: 0.75rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--amber); margin-bottom: 0.5rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+
+    .gear-count::after {
+      content: ''; display: block; flex: 1; max-width: 40px;
+      height: 1px; background: var(--amber); opacity: 0.3;
+    }
+
+    .gear-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 0.95; letter-spacing: 0.03em;
+      color: var(--cream); margin-bottom: 1.2rem;
+    }
+
+    .gear-specs {
+      display: flex; flex-direction: column; gap: 0.45rem;
+    }
+
+    .spec-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 0.5rem;
+      font-size: 0.78rem; letter-spacing: 0.1em;
+      line-height: 1.5;
+    }
+
+    .spec-key {
+      color: rgba(240,234,214,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .spec-val {
+      color: rgba(240,234,214,0.88);
+    }
+
+    /* ─── ACCESSORIES (single-column list) ──────────────── */
+    .accessory-list {
+      padding: 2rem 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem 3rem;
+    }
+
+    .accessory-item {
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      font-size: 0.93rem; letter-spacing: 0.08em; line-height: 1.5;
+      color: rgba(240,234,214,0.85);
+    }
+
+    .accessory-item::before {
+      content: '—'; color: var(--amber); flex-shrink: 0;
+    }
+
+    /* ─── RIDER NOTE ────────────────────────────────────── */
+    .rider-note {
+      padding: 3rem 3.5rem;
+      display: flex; align-items: flex-start; gap: 2rem;
+      border-top: 1px solid rgba(232,160,32,0.12);
+    }
+
+    .rider-note-marker {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; color: var(--amber); line-height: 1; flex-shrink: 0;
+    }
+
+    .rider-note-text {
+      font-size: 0.9rem; letter-spacing: 0.1em; line-height: 2;
+      color: rgba(240,234,214,0.75); max-width: 700px;
+      padding-top: 0.5rem;
+    }
+
+    /* ─── FROG ──────────────────────────────────────────── */
+    .frog-corner {
+      position: fixed; bottom: 6rem; right: 2rem;
+      width: 80px; opacity: 0.1;
+      animation: frog-nav 3.2s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(0,240,208,0.5));
+      pointer-events: none;
+    }
+
+    /* ─── MOBILE ────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .rig-hero   { padding: 4rem 1.5rem 2.5rem; }
+      .gear-section { padding: 0 1.5rem; }
+      .gear-items { grid-template-columns: 1fr; }
+      .gear-item  { border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+      .rider-note { padding: 2.5rem 1.5rem; flex-direction: column; gap: 0.5rem; }
+      .stats-bar  { flex-direction: column; }
+      .stat       { border-right: none; border-bottom: 1px solid rgba(232,160,32,0.1); padding: 1.5rem; }
+      .stat:last-child { border-bottom: none; }
+      .accessory-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="rig-bg"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <img src="media/logo.png" alt="Steezy Sound" class="nav-frog" />
+      <span class="nav-wordmark">Steezy Sound</span>
+    </a>
+    <div class="nav-links">
+      <div class="nav-dropdown">
+        <button class="nav-link" aria-haspopup="true" aria-expanded="false">Services ▾</button>
+        <div class="dropdown-menu">
+          <a href="live-recording.html" class="dropdown-item">Live Shows</a>
+          <a href="studio.html" class="dropdown-item">Studio Recording</a>
+          <a href="promo-video.html" class="dropdown-item">Promo Videos</a>
+        </div>
+      </div>
+      <a href="rig.html" class="nav-link active">The Rig</a>
+      <a href="menu.html" class="nav-link">The Menu</a>
+    </div>
+  </nav>
+
+  <div class="rig-page">
+
+    <!-- HERO -->
+    <div class="rig-hero">
+      <p class="rig-eyebrow">Steezy Sound &nbsp;·&nbsp; Equipment Spec Sheet</p>
+      <h1 class="rig-title">The<br><span>Rig.</span></h1>
+      <p class="rig-sub">Professional-grade gear, hauled to your venue. Everything needed to make a show sound like it was meant to be heard.</p>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-num">24</span>
+        <span class="stat-label">Mixer Inputs</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">6</span>
+        <span class="stat-label">Powered Speakers</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">10+</span>
+        <span class="stat-label">Mics</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">2</span>
+        <span class="stat-label">Wireless Systems</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">Wi-Fi</span>
+        <span class="stat-label">Remote Control</span>
+      </div>
+    </div>
+
+    <!-- ── 01 PA SYSTEM ──────────────────────────────────── -->
+    <div class="gear-section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <span class="section-title">PA System</span>
+      </div>
+      <div class="gear-items">
+
+        <div class="gear-item">
+          <p class="gear-count">2 ×</p>
+          <h2 class="gear-name">QSC K12.2</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Role</span><span class="spec-val">Main speakers — left and right</span></div>
+            <div class="spec-row"><span class="spec-key">Sound</span><span class="spec-val">Loud, clear, and flat — hears everything you put in</span></div>
+            <div class="spec-row"><span class="spec-key">Power</span><span class="spec-val">2,000W each</span></div>
+            <div class="spec-row"><span class="spec-key">Connects via</span><span class="spec-val">XLR from the mixer</span></div>
+          </div>
+        </div>
+
+        <div class="gear-item">
+          <p class="gear-count">2 ×</p>
+          <h2 class="gear-name">QSC K10.2</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Role</span><span class="spec-val">Stage monitors — what the band hears</span></div>
+            <div class="spec-row"><span class="spec-key">Sound</span><span class="spec-val">Same quality as the mains, smaller footprint</span></div>
+            <div class="spec-row"><span class="spec-key">Power</span><span class="spec-val">2,000W each</span></div>
+            <div class="spec-row"><span class="spec-key">Connects via</span><span class="spec-val">XLR thru chain or direct from mixer</span></div>
+          </div>
+        </div>
+
+        <div class="gear-item">
+          <p class="gear-count">2 ×</p>
+          <h2 class="gear-name">JBL EON10</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Role</span><span class="spec-val">Stage monitors — what the band hears</span></div>
+            <div class="spec-row"><span class="spec-key">Sound</span><span class="spec-val">Angled up at performers so they can hear themselves</span></div>
+            <div class="spec-row"><span class="spec-key">Connects via</span><span class="spec-val">Dedicated monitor mix from the Ui24R</span></div>
+          </div>
+        </div>
+
+        <div class="gear-item">
+          <p class="gear-count">1 ×</p>
+          <h2 class="gear-name">Soundcraft<br>Ui24R</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Inputs</span><span class="spec-val">24 channels — plenty for a full band</span></div>
+            <div class="spec-row"><span class="spec-key">Control</span><span class="spec-val">Wi-Fi — mix from your phone or any browser</span></div>
+            <div class="spec-row"><span class="spec-key">EQ &amp; dynamics</span><span class="spec-val">Full EQ and compression on every channel</span></div>
+            <div class="spec-row"><span class="spec-key">FX</span><span class="spec-val">Built-in reverb and delay — no extra gear needed</span></div>
+            <div class="spec-row"><span class="spec-key">Recording</span><span class="spec-val">Records every channel separately to USB</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 02 MICROPHONES ────────────────────────────────── -->
+    <div class="gear-section">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <span class="section-title">Microphones</span>
+      </div>
+      <div class="gear-items">
+
+        <div class="gear-item">
+          <p class="gear-count">2 ×</p>
+          <h2 class="gear-name">Sennheiser<br>e609</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Role</span><span class="spec-val">Guitar cab mic</span></div>
+            <div class="spec-row"><span class="spec-key">Best for</span><span class="spec-val">Electric guitar amps and snare</span></div>
+            <div class="spec-row"><span class="spec-key">Setup</span><span class="spec-val">Hangs directly over the cab — no stand needed</span></div>
+          </div>
+        </div>
+
+        <div class="gear-item">
+          <p class="gear-count">2 ×</p>
+          <h2 class="gear-name">Shure<br>BLX288/PG58</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Role</span><span class="spec-val">Wireless vocal system</span></div>
+            <div class="spec-row"><span class="spec-key">Range</span><span class="spec-val">~100ft — no cable, no problem</span></div>
+            <div class="spec-row"><span class="spec-key">Best for</span><span class="spec-val">Lead vocals, MC, crowd work</span></div>
+          </div>
+        </div>
+
+        <div class="gear-item">
+          <p class="gear-count">2 ×</p>
+          <h2 class="gear-name">Shure SM57</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Role</span><span class="spec-val">Instrument mic</span></div>
+            <div class="spec-row"><span class="spec-key">Best for</span><span class="spec-val">Guitar cabs, snare, brass — workhorse of live sound</span></div>
+          </div>
+        </div>
+
+        <div class="gear-item">
+          <p class="gear-count">2 ×</p>
+          <h2 class="gear-name">Shure SM58</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Role</span><span class="spec-val">Vocal mic</span></div>
+            <div class="spec-row"><span class="spec-key">Best for</span><span class="spec-val">Backup vocals, live performance</span></div>
+          </div>
+        </div>
+
+        <div class="gear-item">
+          <p class="gear-count">1 ×</p>
+          <h2 class="gear-name">Drum Mic Kit</h2>
+          <div class="gear-specs">
+            <div class="spec-row"><span class="spec-key">Role</span><span class="spec-val">Full drum coverage</span></div>
+            <div class="spec-row"><span class="spec-key">Includes</span><span class="spec-val">Kick, snare, toms, overheads</span></div>
+            <div class="spec-row"><span class="spec-key">Note</span><span class="spec-val">Specs TBD — ask for details</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 04 ACCESSORIES ────────────────────────────────── -->
+    <div class="gear-section">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <span class="section-title">Cables &amp; Accessories</span>
+      </div>
+      <div class="accessory-list">
+        <div class="accessory-item">XLR cables — 10ft, 25ft, and 50ft runs</div>
+        <div class="accessory-item">Speaker stands for mains</div>
+        <div class="accessory-item">Mic stands — straight and boom</div>
+        <div class="accessory-item">Power strips and extension cables</div>
+        <div class="accessory-item">Phone mounts for multi-cam video recording</div>
+        <div class="accessory-item">Gaffer tape</div>
+        <div class="accessory-item">Spare cables — always</div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <span>Steezy Sound &copy; 2025</span>
+      <a href="mailto:stefanturkowski@gmail.com">stefanturkowski@gmail.com</a>
+      <span>steezysound.com</span>
+    </footer>
+
+  </div>
+
+  <img src="media/logo.png" alt="" class="frog-corner" aria-hidden="true" />
+
+  <script>
+    document.querySelectorAll('.nav-dropdown').forEach(dd => {
+      dd.querySelector('button')?.addEventListener('click', e => {
+        e.stopPropagation();
+        const open = dd.classList.toggle('open');
+        dd.querySelector('button').setAttribute('aria-expanded', open);
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(dd => {
+        dd.classList.remove('open');
+        dd.querySelector('button')?.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+</body>
+</html>

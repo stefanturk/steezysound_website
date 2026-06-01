@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promo Videos — Steezy Sound</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ─── HERO ─────────────────────────────────────────── */
+    .service-hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 5rem 3.5rem 4rem;
+      overflow: hidden;
+    }
+
+    .service-hero-bg {
+      position: absolute; inset: 0;
+      background: url('media/landing.jpg') center/cover no-repeat;
+      filter: brightness(0.28);
+      z-index: 0;
+    }
+
+    .service-hero::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(135deg, rgba(200,50,50,0.08) 0%, transparent 55%);
+    }
+
+    .service-hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 75%;
+      background: linear-gradient(to top, rgba(8,8,8,0.96), transparent);
+      z-index: 2;
+    }
+
+    .hero-inner { position: relative; z-index: 3; }
+
+    .hero-num {
+      font-size: 0.9rem; letter-spacing: 0.28em;
+      color: var(--amber); margin-bottom: 0.6rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .hero-num::after {
+      content: ''; display: block; width: 60px; height: 1px;
+      background: var(--amber); opacity: 0.4;
+    }
+
+    .service-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.9; letter-spacing: 0.03em;
+      color: var(--cream); margin-bottom: 1.2rem;
+    }
+
+    .service-title span { color: var(--amber); }
+
+    .service-subtitle {
+      font-size: 0.93rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: rgba(240,234,214,0.85); max-width: 500px;
+    }
+
+    /* ─── VIDEO SECTION ─────────────────────────────────── */
+    .video-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem 0;
+    }
+
+    .video-wrapper {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      background: #111;
+      border: 1px solid rgba(232,160,32,0.12);
+    }
+
+    .video-wrapper iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ─── BODY ──────────────────────────────────────────── */
+    .service-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem;
+    }
+
+    .benefits {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 1.1rem;
+    }
+    .benefits li {
+      display: flex; align-items: flex-start; gap: 0.8rem;
+      font-size: 1.05rem; letter-spacing: 0.06em; line-height: 1.5;
+      color: rgba(240,234,214,0.9); font-style: italic;
+    }
+    .benefits li::before {
+      content: '—'; color: var(--amber); flex-shrink: 0; margin-top: 0.05em;
+    }
+
+    .price-col {
+      display: flex; flex-direction: column; gap: 2.5rem;
+    }
+
+    .price-figure {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 10vw, 9rem);
+      line-height: 1; color: var(--amber); letter-spacing: 0.02em;
+    }
+
+    .price-note {
+      font-size: 0.84rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(240,234,214,0.75); margin-top: -1.5rem;
+    }
+
+    /* Texture band */
+    .texture-band {
+      position: relative; height: 200px; overflow: hidden;
+    }
+    .texture-band-bg {
+      position: absolute; inset: 0;
+      background: url('media/landing.jpg') center/cover no-repeat;
+      filter: brightness(0.12);
+    }
+    .texture-band-text {
+      position: relative; z-index: 1; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .texture-band-text blockquote {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      letter-spacing: 0.06em;
+      color: rgba(240,234,214,0.1);
+      text-align: center;
+    }
+
+    /* ─── MOBILE ────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .service-hero { padding: 5rem 1.5rem 3rem; }
+      .video-section { padding: 4rem 1.5rem 0; }
+      .service-body { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <img src="media/logo.png" alt="Steezy Sound" class="nav-frog" />
+      <span class="nav-wordmark">Steezy Sound</span>
+    </a>
+    <div class="nav-links">
+      <div class="nav-dropdown">
+        <button class="nav-link active" aria-haspopup="true" aria-expanded="false">Services ▾</button>
+        <div class="dropdown-menu">
+          <a href="live-recording.html" class="dropdown-item">Live Shows</a>
+          <a href="studio.html" class="dropdown-item">Studio Recording</a>
+          <a href="promo-video.html" class="dropdown-item" style="color:var(--amber)">Promo Videos</a>
+        </div>
+      </div>
+      <a href="rig.html" class="nav-link">The Rig</a>
+      <a href="menu.html" class="nav-link">The Menu</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="service-hero">
+    <div class="service-hero-bg"></div>
+    <div class="hero-inner">
+      <h1 class="service-title">Raw Energy<br><span>For The Big Screen.</span></h1>
+      <p class="service-subtitle">Instagram, YouTube, and everywhere else.</p>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <div class="video-section">
+    <span class="section-label">Example work</span>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/tv8Gk_eudfo?si=no35zVXCuQC327UO"
+        title="Steezy Sound — Promo Video Example"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="service-body">
+    <div>
+      <span class="section-label">What you get</span>
+      <ul class="benefits">
+        <li>YouTube: horizontal, multi-cam, $100/song — angle cuts every 5–10 sec, delivered within a week</li>
+        <li>Instagram: vertical, multi-cam, $100/reel — cuts every ~3 sec, lyric subtitles, effects, delivered within a week</li>
+        <li>Titles, transitions, and zooms on every video</li>
+        <li>Professionally mixed audio baked in</li>
+        <li>We'll provide four 4K camera angles — commit to at least one video before the show so cameras are set up</li>
+        <li>Delivered via Google Drive — decision can be made after the show</li>
+      </ul>
+    </div>
+
+    <div class="price-col">
+      <div>
+        <span class="section-label">YouTube</span>
+        <p class="price-figure">$100</p>
+        <p class="price-note">Per song &nbsp;·&nbsp; horizontal multi-cam</p>
+      </div>
+      <div>
+        <span class="section-label">Instagram</span>
+        <p class="price-figure">$100</p>
+        <p class="price-note">Per 30 seconds &nbsp;·&nbsp; vertical</p>
+      </div>
+      <!-- REPLACE: update email address -->
+      <a href="mailto:stefanturkowski@gmail.com?subject=Promo Video Inquiry" class="btn-book">
+        Book via email &nbsp;→
+      </a>
+      <a href="menu.html" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--amber-dim); text-decoration:none;">
+        ← Build your quote on The Menu
+      </a>
+    </div>
+  </div>
+
+  <!-- TEXTURE BAND -->
+  <div class="texture-band">
+    <div class="texture-band-bg"></div>
+    <div class="texture-band-text">
+      <blockquote>You played a great show. Prove it.</blockquote>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <span>Steezy Sound &copy; 2025</span>
+    <a href="mailto:stefanturkowski@gmail.com">stefanturkowski@gmail.com</a>
+    <span>steezysound.com</span>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.nav-dropdown').forEach(dd => {
+      dd.querySelector('button')?.addEventListener('click', e => {
+        e.stopPropagation();
+        const open = dd.classList.toggle('open');
+        dd.querySelector('button').setAttribute('aria-expanded', open);
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(dd => {
+        dd.classList.remove('open');
+        dd.querySelector('button')?.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+</body>
+</html>
