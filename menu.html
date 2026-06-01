@@ -354,8 +354,7 @@
       <div class="preset-bar">
         <span class="preset-label">Start with a preset</span>
         <select class="preset-select" id="preset-select">
-          <option value="custom">Custom — build from scratch</option>
-          <option value="pa">Just the PA — $500</option>
+          <option value="pa">Just the PA</option>
           <option value="diy">Audio DIY — PA + rough mix</option>
           <option value="release">Audio Release — PA + rough mix + mastering</option>
           <option value="instagram">Instagram — PA + rough mix + 2 reels</option>
@@ -523,7 +522,6 @@
     ];
 
     const PRESETS = {
-      custom:    {},
       pa:        { pa: 1 },
       diy:       { pa: 1, rough: 1 },
       release:   { pa: 1, rough: 1, master: 3 },
@@ -560,18 +558,43 @@
       }
     }
 
+    function showWarning(msg) {
+      const fb = document.getElementById('copy-feedback');
+      fb.textContent = msg;
+      fb.classList.add('show');
+      setTimeout(() => { fb.classList.remove('show'); fb.textContent = 'Copied!'; }, 2500);
+    }
+
+    function roughIsRequired() {
+      return ROUGH_DEPS.some(id => isOn(id));
+    }
+
     // Toggle rows
     ITEMS.forEach(item => {
       const row = getRow(item.id);
       row.addEventListener('click', e => {
         if (e.target.tagName === 'INPUT') return; // don't toggle when clicking qty
+
+        // PA can never be turned off
+        if (item.id === 'pa' && isOn('pa')) return;
+
+        // Rough Mix can't be turned off while a dependent item is active
+        if (item.id === 'rough' && isOn('rough') && roughIsRequired()) {
+          showWarning('Required by selected items');
+          return;
+        }
+
         const nowOn = !isOn(item.id);
         setOn(item.id, nowOn);
         if (nowOn && ROUGH_DEPS.includes(item.id)) ensureRough();
-        document.getElementById('preset-select').value = 'custom';
         updateTotal();
       });
       row.querySelector('.row-qty').addEventListener('input', () => {
+        // Clamp PA qty to minimum 1
+        if (item.id === 'pa') {
+          const inp = row.querySelector('.row-qty');
+          if (parseInt(inp.value) < 1 || isNaN(parseInt(inp.value))) inp.value = 1;
+        }
         if (!isOn(item.id)) setOn(item.id, true);
         if (ROUGH_DEPS.includes(item.id)) ensureRough();
         updateTotal();
