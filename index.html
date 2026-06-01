@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steezy Sound</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #080808;
+      --cream: #f0ead6;
+      --amber: #e8a020;
+      --amber-dim: #7a5010;
+      --grain-opacity: 0.045;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'DM Mono', monospace;
+      overflow: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: var(--grain-opacity);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Radial glow behind content */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(232, 160, 32, 0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .scene {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    /* Top label strip */
+    .label-strip {
+      position: absolute;
+      top: 2.2rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber-dim);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.6s forwards;
+    }
+
+    /* Equalizer */
+    .eq {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 48px;
+      margin-bottom: 2.8rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.4s forwards;
+    }
+
+    .bar {
+      width: 4px;
+      border-radius: 2px 2px 0 0;
+      background: var(--amber);
+      transform-origin: bottom;
+      animation: pulse var(--dur) ease-in-out infinite alternate;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes pulse {
+      from { transform: scaleY(var(--low)); opacity: 0.5; }
+      to   { transform: scaleY(var(--high)); opacity: 1; }
+    }
+
+    /* Headline */
+    .welcome {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      font-style: italic;
+      font-weight: 300;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.7s forwards;
+    }
+
+    .wordmark {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 14vw, 11rem);
+      line-height: 0.88;
+      letter-spacing: 0.04em;
+      text-align: center;
+      color: var(--cream);
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+    }
+
+    .wordmark span {
+      display: block;
+      color: var(--amber);
+    }
+
+    /* Divider line */
+    .rule {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--amber), transparent);
+      margin: 2rem 0 1.6rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 1.2s forwards;
+    }
+
+    .tagline {
+      font-size: 0.62rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--cream);
+      opacity: 0;
+      animation: fadeUp 0.6s ease 1.4s forwards;
+    }
+
+    /* Bottom strip */
+    .bottom-strip {
+      position: absolute;
+      bottom: 2.2rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      padding: 0 2.5rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber-dim);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.8s forwards;
+    }
+
+    /* Horizontal accent lines */
+    .accent-line {
+      position: absolute;
+      left: 2.5rem;
+      right: 2.5rem;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--amber-dim) 30%, var(--amber-dim) 70%, transparent);
+      opacity: 0;
+      animation: fadeIn 1s ease 1.5s forwards;
+    }
+    .accent-line.top    { top: 4.5rem; }
+    .accent-line.bottom { bottom: 4.5rem; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Vinyl record decoration — far right */
+    .vinyl {
+      position: fixed;
+      right: -120px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        #111 0deg, #1a1a1a 5deg, #111 10deg, #1a1a1a 15deg,
+        #111 20deg, #1a1a1a 25deg, #111 30deg, #1a1a1a 35deg,
+        #111 40deg, #1a1a1a 45deg, #111 50deg, #1a1a1a 55deg,
+        #111 60deg, #1a1a1a 65deg, #111 70deg, #1a1a1a 75deg,
+        #111 80deg, #1a1a1a 85deg, #111 90deg, #1a1a1a 95deg,
+        #111 100deg, #1a1a1a 105deg, #111 110deg, #1a1a1a 115deg,
+        #111 120deg, #1a1a1a 125deg, #111 130deg, #1a1a1a 135deg,
+        #111 140deg, #1a1a1a 145deg, #111 150deg, #1a1a1a 155deg,
+        #111 160deg, #1a1a1a 165deg, #111 170deg, #1a1a1a 175deg,
+        #111 180deg, #1a1a1a 185deg, #111 190deg, #1a1a1a 195deg,
+        #111 200deg, #1a1a1a 205deg, #111 210deg, #1a1a1a 215deg,
+        #111 220deg, #1a1a1a 225deg, #111 230deg, #1a1a1a 235deg,
+        #111 240deg, #1a1a1a 245deg, #111 250deg, #1a1a1a 255deg,
+        #111 260deg, #1a1a1a 265deg, #111 270deg, #1a1a1a 275deg,
+        #111 280deg, #1a1a1a 285deg, #111 290deg, #1a1a1a 295deg,
+        #111 300deg, #1a1a1a 305deg, #111 310deg, #1a1a1a 315deg,
+        #111 320deg, #1a1a1a 325deg, #111 330deg, #1a1a1a 335deg,
+        #111 340deg, #1a1a1a 345deg, #111 350deg, #1a1a1a 355deg, #111 360deg
+      );
+      opacity: 0;
+      animation: fadeIn 1.2s ease 0.3s forwards, spin 18s linear infinite;
+      box-shadow: 0 0 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.5);
+    }
+    .vinyl::after {
+      content: '';
+      position: absolute;
+      inset: 38%;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--amber) 0%, #a06010 60%, #604008 100%);
+      box-shadow: 0 0 12px rgba(232, 160, 32, 0.3);
+    }
+
+    @keyframes spin {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    /* Mirror vinyl left */
+    .vinyl-left {
+      left: -150px;
+      right: auto;
+      opacity: 0.4;
+      animation: fadeIn 1.2s ease 0.5s forwards, spin 24s linear infinite reverse;
+      width: 260px;
+      height: 260px;
+    }
+  </style>
+</head>
+<body>
+  <div class="vinyl"></div>
+  <div class="vinyl vinyl-left"></div>
+
+  <div class="scene">
+    <div class="label-strip">
+      <span>Est. 2025</span>
+      <span>steezysound.com</span>
+    </div>
+
+    <div class="accent-line top"></div>
+
+    <div class="eq" id="eq"></div>
+
+    <p class="welcome">Welcome to</p>
+
+    <h1 class="wordmark">
+      Steezy<span>Sound</span>
+    </h1>
+
+    <div class="rule"></div>
+
+    <p class="tagline">Something is coming</p>
+
+    <div class="accent-line bottom"></div>
+
+    <div class="bottom-strip">
+      <span>&mdash;&nbsp; Feel the vibe &nbsp;&mdash;</span>
+    </div>
+  </div>
+
+  <script>
+    const eq = document.getElementById('eq');
+    const barCount = 18;
+    const bars = [];
+
+    for (let i = 0; i < barCount; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      const low  = (0.15 + Math.random() * 0.2).toFixed(2);
+      const high = (0.55 + Math.random() * 0.45).toFixed(2);
+      const dur  = (0.5  + Math.random() * 0.9).toFixed(2);
+      const del  = (Math.random() * 0.8).toFixed(2);
+      bar.style.cssText = `--low:${low}; --high:${high}; --dur:${dur}s; --delay:${del}s; height:100%;`;
+      eq.appendChild(bar);
+      bars.push(bar);
+    }
+  </script>
+</body>
+</html>
