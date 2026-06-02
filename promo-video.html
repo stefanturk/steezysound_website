@@ -264,11 +264,18 @@
 
     // Parallax
     (function() {
-      const bgs = document.querySelectorAll('.service-hero-bg, .texture-band-bg');
-      const update = () => bgs.forEach(bg => {
-        bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
-      });
+      const update = () => {
+        document.querySelectorAll('.service-hero-bg').forEach(bg => {
+          bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+        });
+        document.querySelectorAll('.texture-band-bg').forEach(bg => {
+          const r = bg.parentElement.getBoundingClientRect();
+          const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
+          bg.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+        });
+      };
       window.addEventListener('scroll', update, { passive: true });
+      update();
     })();
   </script>
 </body>

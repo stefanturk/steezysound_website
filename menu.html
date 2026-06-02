@@ -481,14 +481,6 @@
       <div class="calc-spacer"></div>
     </div>
 
-    <!-- TEXTURE BAND -->
-    <div class="texture-band">
-      <div class="texture-band-bg"></div>
-      <div class="texture-band-text">
-        <blockquote>Build your quote. Book via email.</blockquote>
-      </div>
-    </div>
-
     <!-- MENU FOOTER -->
     <div class="menu-foot">
       <p class="menu-foot-text">Add-ons can be decided after the show · rough mix and stems within 24 hrs · produced songs and videos within a week</p>
@@ -697,9 +689,6 @@
     (function() {
       const update = () => {
         document.querySelector('.menu-bg').style.backgroundPositionY = `calc(50% - ${window.scrollY * 0.35}px)`;
-        document.querySelectorAll('.texture-band-bg').forEach(bg => {
-          bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
-        });
       };
       window.addEventListener('scroll', update, { passive: true });
     })();
