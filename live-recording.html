@@ -21,7 +21,7 @@
     .service-hero-bg {
       position: absolute; inset: 0;
       background: url('media/live_shows.jpg') center top / cover no-repeat;
-      filter: brightness(0.3);
+      filter: brightness(0.5);
       z-index: 0;
     }
 
@@ -159,7 +159,7 @@
     .texture-band-bg {
       position: absolute; inset: 0;
       background: url('media/bottom.jpg') center/cover no-repeat;
-      filter: brightness(0.12);
+      filter: brightness(0.45);
     }
 
     .texture-band-text {
@@ -223,10 +223,10 @@
     <div>
       <span class="section-label">What you get</span>
       <ul class="benefits">
-        <li><span>20 mic/instrument inputs — <a href="rig.html" style="color:var(--amber);text-decoration:none;">full PA rig</a>, mics, stands, and cables included</span></li>
-        <li>Rough mix of the full set as one MP3 — delivered within 24 hours</li>
-        <li>Full set as one MP3 · Multitrack WAVs · Delivery within 24 hours</li>
-        <li>Professional song mixing for distribution — individual WAV files delivered within a week</li>
+        <li><span><a href="rig.html" style="color:var(--amber);text-decoration:none;">Full PA Rig</a>: speakers, mixer,  mics, stands, and cables included</span></li>
+        <li>Prompt timing, professional communications, and rock solid sound for any venue</li>
+        <li>Optional add-ons include rought set mix as one MP3, and Multitrack WAVs. Delivery within 24 hours</li>
+        <li>Other add-ons include professional audio and video mixing for distribution. Delivered within a week</li>
       </ul>
     </div>
 
@@ -311,7 +311,7 @@
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
-          bg.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+          bg.style.backgroundPositionY = `calc(38% + ${offset}px)`;
         });
       };
       window.addEventListener('scroll', update, { passive: true });

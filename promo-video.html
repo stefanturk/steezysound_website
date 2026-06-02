@@ -20,7 +20,7 @@
     .service-hero-bg {
       position: absolute; inset: 0;
       background: url('media/promo_vids.jpg') center/cover no-repeat;
-      filter: brightness(0.28);
+      filter: brightness(0.5);
       z-index: 0;
     }
 
@@ -129,7 +129,7 @@
     .texture-band-bg {
       position: absolute; inset: 0;
       background: url('media/bottom.jpg') center/cover no-repeat;
-      filter: brightness(0.12);
+      filter: brightness(0.45);
     }
     .texture-band-text {
       position: relative; z-index: 1; height: 100%;
@@ -202,12 +202,12 @@
     <div>
       <span class="section-label">What you get</span>
       <ul class="benefits">
-        <li>YouTube: horizontal, multi-cam, $100/song — angle cuts every 5–10 sec, delivered within a week</li>
-        <li>Instagram: vertical, multi-cam, $100/reel — cuts every ~3 sec, lyric subtitles, effects, delivered within a week</li>
+        <li>YouTube: horizontal multi-cam with video angle cuts every 5–10 sec</li>
+        <li>Instagram: vertical multi-cam with lyric subtitles, effects, and video angle cuts every ~3 sec</li>
         <li>Titles, transitions, and zooms on every video</li>
-        <li>Professionally mixed audio baked in</li>
-        <li>We'll provide four 4K camera angles — commit to at least one video before the show so cameras are set up</li>
-        <li>Delivered via Google Drive — decision can be made after the show</li>
+        <li>Professionally mixed multi-track audio in every video</li>
+        <li>Up to four 4K camera angles of your choice</li>
+        <li>Commit to at least one video before the show, but decide on exact song(s) after the show</li>
       </ul>
     </div>
 
@@ -220,14 +220,14 @@
       <div>
         <span class="section-label">Instagram</span>
         <p class="price-figure">$100</p>
-        <p class="price-note">Per 30 seconds &nbsp;·&nbsp; vertical</p>
+        <p class="price-note">Per 30 seconds &nbsp;·&nbsp; vertical multi-cam</p>
       </div>
       <!-- REPLACE: update email address -->
-      <a href="mailto:stefanturkowski@gmail.com?subject=Promo Video Inquiry" class="btn-book">
-        Book via email &nbsp;→
-      </a>
       <a href="menu.html" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--amber-dim); text-decoration:none;">
         ← Build your quote on The Menu
+      </a>
+      <a href="mailto:stefanturkowski@gmail.com?subject=Promo Video Inquiry" class="btn-book">
+        Book via email &nbsp;→
       </a>
     </div>
   </div>
@@ -271,7 +271,7 @@
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
-          bg.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+          bg.style.backgroundPositionY = `calc(38% + ${offset}px)`;
         });
       };
       window.addEventListener('scroll', update, { passive: true });

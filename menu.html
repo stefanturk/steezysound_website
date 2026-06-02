@@ -18,7 +18,7 @@
     .menu-bg {
       position: fixed; inset: 0;
       background: url('media/menu.jpg') center/cover no-repeat;
-      filter: brightness(0.08);
+      filter: brightness(0.14);
       z-index: -1;
     }
 
@@ -509,7 +509,7 @@
     </div>
     <div class="estimate-actions">
       <button class="btn-copy" id="btn-copy">Copy quote</button>
-      <button class="btn-print" id="btn-print">Print / Save PDF</button>
+      <button class="btn-print" id="btn-print">Print PDF</button>
       <a href="mailto:stefanturkowski@gmail.com" class="btn-book" style="margin:0">Book via email →</a>
     </div>
   </div>
@@ -682,8 +682,54 @@
       });
     });
 
-    // Print
-    document.getElementById('btn-print').addEventListener('click', () => window.print());
+    // Print PDF — only selected items + total
+    document.getElementById('btn-print').addEventListener('click', () => {
+      const rows = [];
+      let total = 0;
+      ITEMS.forEach(item => {
+        if (!isOn(item.id)) return;
+        const qty  = getQty(item.id);
+        const line = item.rate * qty;
+        total += line;
+        rows.push({ name: item.name, qty, unit: item.unit, rate: item.rate, line });
+      });
+
+      const rowsHtml = rows.map(r => `
+        <tr>
+          <td>${r.name}</td>
+          <td>${r.qty} ${r.unit}${r.qty > 1 ? 's' : ''}</td>
+          <td>$${r.rate.toLocaleString()}</td>
+          <td>$${r.line.toLocaleString()}</td>
+        </tr>`).join('');
+
+      const win = window.open('', '_blank');
+      win.document.write(`<!DOCTYPE html><html><head><title>Steezy Sound — Quote</title><style>
+        body { font-family: 'Courier New', monospace; padding: 3rem; color: #111; max-width: 700px; margin: 0 auto; }
+        h1 { font-size: 2rem; margin-bottom: 0.25rem; letter-spacing: 0.04em; }
+        .sub { color: #666; font-size: 0.85rem; margin-bottom: 2.5rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: #666; padding: 0.5rem 0.75rem; border-bottom: 2px solid #111; }
+        td { padding: 0.75rem; border-bottom: 1px solid #ddd; font-size: 0.95rem; }
+        td:last-child, th:last-child { text-align: right; }
+        .total-row td { font-weight: bold; font-size: 1.1rem; border-top: 2px solid #111; border-bottom: none; padding-top: 1rem; }
+        .footer { margin-top: 3rem; font-size: 0.8rem; color: #666; border-top: 1px solid #ddd; padding-top: 1rem; }
+        @media print { body { padding: 1.5rem; } }
+      </style></head><body>
+        <h1>Steezy Sound</h1>
+        <p class="sub">Quote · steezysound.com · stefanturkowski@gmail.com</p>
+        <table>
+          <thead><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Total</th></tr></thead>
+          <tbody>
+            ${rowsHtml}
+            <tr class="total-row"><td colspan="3">Total</td><td>$${total.toLocaleString()}</td></tr>
+          </tbody>
+        </table>
+        <p class="footer">Add-ons can be decided after the show · rough mix and stems within 24 hrs · produced songs and videos within a week</p>
+      </body></html>`);
+      win.document.close();
+      win.focus();
+      win.print();
+    });
 
     // Parallax
     (function() {

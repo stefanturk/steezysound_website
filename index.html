@@ -20,7 +20,7 @@
     .hero-bg {
       position: absolute; inset: 0;
       background: url('media/landing.jpg') center/cover no-repeat;
-      filter: brightness(0.26);
+      filter: brightness(0.5);
       z-index: 0;
     }
 
@@ -32,15 +32,15 @@
     }
 
     #wander-frog {
-      position: fixed;
+      position: absolute;
       z-index: 100;
       width: clamp(60px, 7vw, 110px);
       height: auto;
       pointer-events: none;
       filter: drop-shadow(0 0 18px rgba(0,240,208,0.5));
       opacity: 0.82;
-      transition: left 8s cubic-bezier(0.45, 0.05, 0.55, 0.95),
-                  top  8s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+      transition: left 12s cubic-bezier(0.22, 1, 0.36, 1),
+                  top  12s cubic-bezier(0.22, 1, 0.36, 1);
       animation: frog-wander-bob 3.6s ease-in-out infinite;
     }
 
@@ -119,7 +119,7 @@
     .card-bg {
       position: absolute; inset: 0;
       background-size: cover; background-position: center;
-      filter: brightness(0.28);
+      filter: brightness(0.62);
       transition: filter 0.5s ease, transform 0.7s ease;
       z-index: 0;
     }
@@ -139,7 +139,7 @@
     }
 
     .service-card:hover .card-bg {
-      filter: brightness(0.42);
+      filter: brightness(0.78);
       transform: scale(1.04);
     }
 
@@ -195,7 +195,7 @@
     .texture-band-bg {
       position: absolute; inset: 0;
       background: url('media/bottom.jpg') center/cover no-repeat;
-      filter: brightness(0.12);
+      filter: brightness(0.45);
     }
     .texture-band-text {
       position: relative; z-index: 1; height: 100%;
@@ -268,7 +268,7 @@
       <div class="card-grad"></div>
       <div class="card-body">
         <h2 class="card-title">Live Shows</h2>
-        <p class="card-hook">Full PA + raw or mastered audio. From $500.</p>
+        <p class="card-hook">Full PA & Sound Support. $500/day.</p>
         <span class="card-link">View service &nbsp;→</span>
       </div>
     </a>
@@ -290,7 +290,7 @@
       <div class="card-grad"></div>
       <div class="card-body">
         <h2 class="card-title">Promo Videos</h2>
-        <p class="card-hook">Multi-cam video. YouTube $100/song · Instagram $100/reel.</p>
+        <p class="card-hook">Multi-cam video. YouTube $100/song. Instagram $100/reel.</p>
         <span class="card-link">View service &nbsp;→</span>
       </div>
     </a>
@@ -348,22 +348,30 @@
     // ── Wandering frog ───────────────────────────────────
     (function() {
       const frog = document.getElementById('wander-frog');
-      let nextTimer;
+      let lastX, lastY;
 
       function wander() {
-        const x = 4 + Math.random() * 84;   // 4vw – 88vw
-        const y = 6 + Math.random() * 82;   // 6vh – 88vh
-        frog.style.left = x + 'vw';
-        frog.style.top  = y + 'vh';
-        // Vary the pause between moves: 2.5s – 5.5s
-        nextTimer = setTimeout(wander, 2500 + Math.random() * 3000);
+        const vw = window.innerWidth;
+        const pageH = document.documentElement.scrollHeight;
+        const minDist = vw * 0.7;
+        let x, y, tries = 0;
+        do {
+          x = -vw * 0.35 + Math.random() * (vw * 1.7);
+          y = -150 + Math.random() * (pageH + 300);
+          tries++;
+        } while (Math.hypot(x - lastX, y - lastY) < minDist && tries < 15);
+        lastX = x;
+        lastY = y;
+        frog.style.left = x + 'px';
+        frog.style.top  = y + 'px';
+        setTimeout(wander, 3000 + Math.random() * 4000);
       }
 
-      // Place immediately off-screen to let CSS transition carry it in
-      frog.style.left = '10vw';
-      frog.style.top  = '50vh';
-      // Small delay so first transition is visible
-      setTimeout(wander, 200);
+      lastX = -window.innerWidth * 0.35 + Math.random() * (window.innerWidth * 1.7);
+      lastY = Math.random() * document.documentElement.scrollHeight;
+      frog.style.left = lastX + 'px';
+      frog.style.top  = lastY + 'px';
+      setTimeout(wander, 400);
     })();
 
     // ── Nav dropdown (mobile tap) ─────────────────────────
@@ -390,7 +398,7 @@
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
-          bg.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+          bg.style.backgroundPositionY = `calc(38% + ${offset}px)`;
         });
       };
       window.addEventListener('scroll', update, { passive: true });

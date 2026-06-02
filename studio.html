@@ -20,7 +20,7 @@
     .service-hero-bg {
       position: absolute; inset: 0;
       background: url('media/studio_recording.jpg') 60% center / cover no-repeat;
-      filter: brightness(0.25) sepia(0.3);
+      filter: brightness(0.5);
       z-index: 0;
     }
 
@@ -160,7 +160,7 @@
     .texture-band-bg {
       position: absolute; inset: 0;
       background: url('media/bottom.jpg') center/cover no-repeat;
-      filter: brightness(0.12);
+      filter: brightness(0.45);
     }
     .texture-band-text {
       position: relative; z-index: 1; height: 100%;
@@ -239,10 +239,10 @@
     <div>
       <span class="section-label">What you get</span>
       <ul class="benefits">
-        <li>8 hours in the studio — track as many songs as you can</li>
-        <li>Songs mixed and mastered for distribution — streaming-ready WAV files</li>
-        <li>Delivered via Google Drive within a week</li>
-        <li>Works with recordings captured live, at practice, or in-session</li>
+        <li>6 hours in the studio — track whatever you like</li>
+        <li>Full band tracking, overdubs, re-amping, anything else you want</li>
+        <li>Songwriting, production, and creative guidance</li>
+        <li>Songs mixed and mastered for distribution. Delivery within a week</li>
       </ul>
     </div>
 
@@ -365,7 +365,7 @@
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
-          bg.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+          bg.style.backgroundPositionY = `calc(38% + ${offset}px)`;
         });
       };
       window.addEventListener('scroll', update, { passive: true });
