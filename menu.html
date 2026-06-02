@@ -668,7 +668,7 @@
     (function() {
       const bg = document.querySelector('.menu-bg');
       const update = () => {
-        bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+        bg.style.backgroundPositionY = `calc(50% - ${window.scrollY * 0.35}px)`;
       };
       window.addEventListener('scroll', update, { passive: true });
     })();
