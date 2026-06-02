@@ -212,6 +212,27 @@
       pointer-events: none;
     }
 
+    /* ─── TEXTURE BAND ─────────────────────────────────── */
+    .texture-band {
+      position: relative; height: 200px; overflow: hidden;
+    }
+    .texture-band-bg {
+      position: absolute; inset: 0;
+      background: url('media/bottom.jpg') center/cover no-repeat;
+      filter: brightness(0.12);
+    }
+    .texture-band-text {
+      position: relative; z-index: 1; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .texture-band-text blockquote {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      letter-spacing: 0.06em;
+      color: rgba(240,234,214,0.1);
+      text-align: center;
+    }
+
     /* ─── MOBILE ────────────────────────────────────────── */
     @media (max-width: 640px) {
       .rig-hero   { padding: 4rem 1.5rem 2.5rem; }
@@ -433,6 +454,14 @@
       </div>
     </div>
 
+    <!-- TEXTURE BAND -->
+    <div class="texture-band">
+      <div class="texture-band-bg"></div>
+      <div class="texture-band-text">
+        <blockquote>Professional-grade gear. Hauled to your venue.</blockquote>
+      </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="site-footer">
       <span>Steezy Sound &copy; 2025</span>
@@ -461,9 +490,12 @@
 
     // Parallax
     (function() {
-      const bg = document.querySelector('.rig-bg');
+      const bgs = document.querySelectorAll('.rig-bg, .texture-band-bg');
       const update = () => {
-        bg.style.backgroundPositionY = `calc(50% - ${window.scrollY * 0.35}px)`;
+        document.querySelector('.rig-bg').style.backgroundPositionY = `calc(50% - ${window.scrollY * 0.35}px)`;
+        document.querySelectorAll('.texture-band-bg').forEach(bg => {
+          bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+        });
       };
       window.addEventListener('scroll', update, { passive: true });
     })();

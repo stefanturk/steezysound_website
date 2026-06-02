@@ -188,6 +188,27 @@
 
     .service-card:hover .card-link { gap: 1em; }
 
+    /* ─── TEXTURE BAND ─────────────────────────────────── */
+    .texture-band {
+      position: relative; height: 200px; overflow: hidden;
+    }
+    .texture-band-bg {
+      position: absolute; inset: 0;
+      background: url('media/bottom.jpg') center/cover no-repeat;
+      filter: brightness(0.12);
+    }
+    .texture-band-text {
+      position: relative; z-index: 1; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .texture-band-text blockquote {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      letter-spacing: 0.06em;
+      color: rgba(240,234,214,0.1);
+      text-align: center;
+    }
+
     /* ─── MOBILE ────────────────────────────────────────── */
     @media (max-width: 800px) {
       .services {
@@ -275,6 +296,14 @@
     </a>
   </section>
 
+  <!-- TEXTURE BAND -->
+  <div class="texture-band">
+    <div class="texture-band-bg"></div>
+    <div class="texture-band-text">
+      <blockquote>Audio &amp; Video Production</blockquote>
+    </div>
+  </div>
+
   <!-- WANDERING FROG -->
   <img src="media/logo.png" alt="" id="wander-frog" aria-hidden="true" />
 
@@ -354,10 +383,11 @@
 
     // Parallax
     (function() {
-      const bgs = document.querySelectorAll('.hero-bg');
-      const update = () => bgs.forEach(bg => {
-        bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
-      });
+      const update = () => {
+        document.querySelectorAll('.hero-bg, .texture-band-bg').forEach(bg => {
+          bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+        });
+      };
       window.addEventListener('scroll', update, { passive: true });
     })();
   </script>
