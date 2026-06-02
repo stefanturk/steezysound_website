@@ -458,6 +458,15 @@
         dd.querySelector('button')?.setAttribute('aria-expanded', 'false');
       });
     });
+
+    // Parallax
+    (function() {
+      const bg = document.querySelector('.rig-bg');
+      const update = () => {
+        bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+      };
+      window.addEventListener('scroll', update, { passive: true });
+    })();
   </script>
 </body>
 </html>

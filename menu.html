@@ -664,6 +664,15 @@
     // Print
     document.getElementById('btn-print').addEventListener('click', () => window.print());
 
+    // Parallax
+    (function() {
+      const bg = document.querySelector('.menu-bg');
+      const update = () => {
+        bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+      };
+      window.addEventListener('scroll', update, { passive: true });
+    })();
+
     // Init with PA on by default (minimum 1 day)
     setOn('pa', true);
     updateTotal();

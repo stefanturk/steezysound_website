@@ -355,6 +355,15 @@
       const pct  = (e.clientX - rect.left) / rect.width;
       if (!isNaN(audio.duration)) audio.currentTime = pct * audio.duration;
     });
+
+    // Parallax
+    (function() {
+      const bgs = document.querySelectorAll('.service-hero-bg, .texture-band-bg');
+      const update = () => bgs.forEach(bg => {
+        bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+      });
+      window.addEventListener('scroll', update, { passive: true });
+    })();
   </script>
 </body>
 </html>

@@ -325,6 +325,15 @@
         dd.querySelector('button')?.setAttribute('aria-expanded', 'false');
       });
     });
+
+    // Parallax
+    (function() {
+      const bgs = document.querySelectorAll('.hero-bg');
+      const update = () => bgs.forEach(bg => {
+        bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+      });
+      window.addEventListener('scroll', update, { passive: true });
+    })();
   </script>
 </body>
 </html>
