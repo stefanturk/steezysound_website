@@ -315,36 +315,7 @@
     <span>steezysound.com</span>
   </footer>
 
-  <!-- PLAY HINT -->
-  <div class="play-hint" id="play-hint" role="button" tabindex="0" aria-label="Play background music">
-    ▶ &nbsp;Play music
-  </div>
-
   <script>
-    // ── Audio autoplay at 20% volume ──────────────────────
-    const audio = new Audio('media/music.mp3');
-    audio.volume = 0.2;
-    audio.loop   = true;
-
-    const hint = document.getElementById('play-hint');
-
-    function tryPlay() {
-      return audio.play().then(() => { hint.style.display = 'none'; });
-    }
-
-    tryPlay().catch(() => { hint.style.display = 'flex'; });
-
-    hint.addEventListener('click', () => tryPlay());
-    hint.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tryPlay(); }
-    });
-
-    // Unlock on first user interaction (covers most browser autoplay policies)
-    document.addEventListener('click', function unlock() {
-      if (audio.paused) tryPlay().catch(() => {});
-      document.removeEventListener('click', unlock, true);
-    }, true);
-
     // ── Wandering frog ───────────────────────────────────
     (function() {
       const frog = document.getElementById('wander-frog');
@@ -398,7 +369,8 @@
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
-          bg.style.backgroundPositionY = `calc(38% + ${offset}px)`;
+          const baseY = window.innerWidth <= 800 ? '10%' : '38%';
+          bg.style.backgroundPositionY = `calc(${baseY} + ${offset}px)`;
         });
       };
       window.addEventListener('scroll', update, { passive: true });

@@ -271,7 +271,8 @@
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
-          bg.style.backgroundPositionY = `calc(38% + ${offset}px)`;
+          const baseY = window.innerWidth <= 800 ? '10%' : '38%';
+          bg.style.backgroundPositionY = `calc(${baseY} + ${offset}px)`;
         });
       };
       window.addEventListener('scroll', update, { passive: true });
