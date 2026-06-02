@@ -31,19 +31,22 @@
       padding: 0 2rem;
     }
 
-    .hero-frog {
-      width: clamp(90px, 14vw, 150px);
-      height: auto; object-fit: contain;
-      animation: frog-hero 2.2s ease-in-out infinite;
-      filter: drop-shadow(0 0 24px rgba(0,240,208,0.55));
-      margin-bottom: 1.8rem;
+    #wander-frog {
+      position: fixed;
+      z-index: 100;
+      width: clamp(60px, 7vw, 110px);
+      height: auto;
+      pointer-events: none;
+      filter: drop-shadow(0 0 18px rgba(0,240,208,0.5));
+      opacity: 0.82;
+      transition: left 4.5s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+                  top  4.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+      animation: frog-wander-bob 2.8s ease-in-out infinite;
     }
 
-    @keyframes frog-hero {
-      0%, 100% { transform: translateY(0) rotate(-5deg) scaleX(1); }
-      45%       { transform: translateY(-20px) rotate(5deg) scaleX(0.93); }
-      50%       { transform: translateY(-22px) rotate(5deg) scaleX(0.92); }
-      55%       { transform: translateY(-20px) rotate(5deg) scaleX(0.93); }
+    @keyframes frog-wander-bob {
+      0%, 100% { transform: rotate(-4deg) scaleX(1); }
+      50%       { transform: rotate(3deg) scaleX(-1); }
     }
 
     .hero-sup { display: none; }
@@ -225,7 +228,6 @@
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-content">
-      <img src="media/logo.png" alt="" class="hero-frog" aria-hidden="true" />
       <h1 class="hero-wordmark">Steezy<span>Sound</span></h1>
       <p class="hero-discipline">Audio &amp; Video Production</p>
       <p class="hero-tagline">We capture the energy. You own the moment.</p>
@@ -273,6 +275,9 @@
     </a>
   </section>
 
+  <!-- WANDERING FROG -->
+  <img src="media/logo.png" alt="" id="wander-frog" aria-hidden="true" />
+
   <!-- FOOTER -->
   <footer class="site-footer">
     <span>Steezy Sound &copy; 2025</span>
@@ -310,6 +315,27 @@
       if (audio.paused) tryPlay().catch(() => {});
       document.removeEventListener('click', unlock, true);
     }, true);
+
+    // ── Wandering frog ───────────────────────────────────
+    (function() {
+      const frog = document.getElementById('wander-frog');
+      let nextTimer;
+
+      function wander() {
+        const x = 4 + Math.random() * 84;   // 4vw – 88vw
+        const y = 6 + Math.random() * 82;   // 6vh – 88vh
+        frog.style.left = x + 'vw';
+        frog.style.top  = y + 'vh';
+        // Vary the pause between moves: 2.5s – 5.5s
+        nextTimer = setTimeout(wander, 2500 + Math.random() * 3000);
+      }
+
+      // Place immediately off-screen to let CSS transition carry it in
+      frog.style.left = '10vw';
+      frog.style.top  = '50vh';
+      // Small delay so first transition is visible
+      setTimeout(wander, 200);
+    })();
 
     // ── Nav dropdown (mobile tap) ─────────────────────────
     document.querySelectorAll('.nav-dropdown').forEach(dd => {
