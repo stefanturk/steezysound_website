@@ -212,7 +212,7 @@
       display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
     }
 
-    .btn-copy {
+    .btn-print {
       background: none; border: 1px solid rgba(232,160,32,0.35);
       color: var(--amber); font-family: 'IBM Plex Mono', monospace;
       font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
@@ -220,17 +220,33 @@
       transition: background 0.2s, border-color 0.2s;
     }
 
-    .btn-copy:hover { background: rgba(232,160,32,0.08); border-color: var(--amber); }
+    .btn-print:hover { background: rgba(232,160,32,0.08); border-color: var(--amber); }
 
-    .btn-print {
-      background: none; border: none;
-      color: rgba(240,234,214,0.4); font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
-      padding: 0.7rem 0.5rem; cursor: pointer;
-      transition: color 0.2s;
+    /* PA add-ons expand toggle */
+    .addon-toggle {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 0.85rem 0;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(232,160,32,0.05);
+      user-select: none;
+      transition: background 0.15s;
     }
-
-    .btn-print:hover { color: var(--cream); }
+    .addon-toggle:hover { background: rgba(232,160,32,0.02); }
+    .addon-toggle-icon {
+      font-size: 0.6rem; color: rgba(232,160,32,0.45);
+      transition: transform 0.2s; margin-left: 1rem;
+    }
+    .addon-toggle.open .addon-toggle-icon { transform: rotate(90deg); }
+    .addon-toggle-label {
+      font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(232,160,32,0.5);
+    }
+    .addon-toggle-status {
+      font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--amber); margin-left: auto; margin-right: 0.5rem;
+    }
+    .addon-subrows { display: none; }
+    .addon-subrows.open { display: block; }
 
     /* Extra bottom padding so last item isn't hidden by bar */
     .calc-spacer { height: 5rem; }
@@ -319,6 +335,68 @@
       pointer-events: none;
     }
 
+    /* ─── PA ADD-ONS GROUP ──────────────────────────────── */
+    .addon-group {
+      border-bottom: 1px solid rgba(232,160,32,0.07);
+    }
+
+    .addon-group-label {
+      padding: 0.8rem 0;
+      font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(232,160,32,0.45);
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .addon-group-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(232,160,32,0.1);
+    }
+
+    .calc-subrow {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.3rem 0 1.3rem 2rem;
+      border-bottom: 1px solid rgba(232,160,32,0.05);
+      border-left: 2px solid rgba(232,160,32,0.12);
+      cursor: pointer;
+      transition: background 0.15s, border-left-color 0.2s;
+      user-select: none;
+    }
+    .calc-subrow:last-child { border-bottom: none; }
+    .calc-subrow:hover { background: rgba(232,160,32,0.02); }
+    .calc-subrow.selected { background: rgba(232,160,32,0.04); border-left-color: rgba(232,160,32,0.45); }
+    .calc-subrow.selected .row-name { color: var(--cream); }
+    .calc-subrow.selected .row-indicator { background: var(--amber); }
+    .calc-subrow.selected .row-price-unit { color: var(--amber); }
+    .calc-subrow.selected .row-qty-wrap { display: flex; }
+    .calc-subrow.selected .row-line-total { display: block; }
+    .calc-subrow .row-name { font-size: clamp(1.1rem, 2.5vw, 2rem); }
+
+    /* Travel row — activated by zip, not click */
+    #row-travel:hover { background: none; }
+    #row-travel.selected { background: rgba(232,160,32,0.04); }
+
+    /* Zip input */
+    .zip-wrap { display: flex; align-items: center; gap: 0.5rem; }
+    .zip-input {
+      width: 5.5rem;
+      background: rgba(232,160,32,0.08);
+      border: 1px solid rgba(232,160,32,0.3);
+      color: var(--cream);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1rem; font-weight: 500;
+      text-align: center;
+      padding: 0.3rem 0.5rem;
+    }
+    .zip-input:focus { outline: 1px solid var(--amber); }
+    .zip-status {
+      font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(240,234,214,0.35); min-width: 7rem;
+    }
+    .zip-status.ok { color: var(--amber); }
+    .zip-status.err { color: rgba(240,100,100,0.65); }
+
     /* ─── WEDDING NOTE ──────────────────────────────────── */
     .wedding-note {
       padding: 2rem 3.5rem;
@@ -369,6 +447,7 @@
       .menu-foot  { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
       .estimate-bar { padding: 1rem 1.5rem; }
       .row-right { flex-wrap: wrap; justify-content: flex-end; }
+      .calc-subrow { padding-left: 1.2rem; }
     }
   </style>
 </head>
@@ -440,6 +519,72 @@
             </div>
             <span class="row-price-unit">$500<span style="font-size:0.5em;opacity:0.6">/day</span></span>
             <span class="row-line-total"></span>
+          </div>
+        </div>
+
+        <!-- PA ADD-ONS (collapsible) -->
+        <div class="addon-toggle" id="addon-toggle">
+          <span class="addon-toggle-icon">▶</span>
+          <span class="addon-toggle-label">PA Add-Ons</span>
+          <span class="addon-toggle-status" id="addon-toggle-status"></span>
+        </div>
+        <div class="addon-subrows" id="addon-subrows">
+          <!-- Wireless Mics -->
+          <div class="calc-subrow" id="row-wireless">
+            <div class="row-left">
+              <div class="row-indicator"></div>
+              <div class="row-info">
+                <span class="row-name">Wireless Mics</span>
+                <span class="row-desc">Both handhelds included &nbsp;·&nbsp; Shure BLX288 system</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="row-qty-wrap">
+                <span class="row-qty-label">Days</span>
+                <input class="row-qty" type="number" min="1" value="1" />
+              </div>
+              <span class="row-price-unit">$50<span style="font-size:0.5em;opacity:0.6">/day</span></span>
+              <span class="row-line-total"></span>
+            </div>
+          </div>
+
+          <!-- Stage Lighting -->
+          <div class="calc-subrow" id="row-lighting">
+            <div class="row-left">
+              <div class="row-indicator"></div>
+              <div class="row-info">
+                <span class="row-name">Stage Lighting</span>
+                <span class="row-desc">Basic LED wash &nbsp;·&nbsp; setup and takedown included</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="row-qty-wrap">
+                <span class="row-qty-label">Days</span>
+                <input class="row-qty" type="number" min="1" value="1" />
+              </div>
+              <span class="row-price-unit">$50<span style="font-size:0.5em;opacity:0.6">/day</span></span>
+              <span class="row-line-total"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRAVEL (own line item) -->
+        <div class="calc-row" id="row-travel" style="cursor:default">
+          <div class="row-left">
+            <div class="row-indicator" id="travel-indicator"></div>
+            <div class="row-info">
+              <span class="row-name">Travel</span>
+              <span class="row-desc">$25 per 10 miles from Berkeley, CA &nbsp;·&nbsp; max 100 mi &nbsp;·&nbsp; required for quote</span>
+            </div>
+          </div>
+          <div class="row-right">
+            <div class="zip-wrap">
+              <span class="row-qty-label">Zip code</span>
+              <input class="zip-input" id="zip-input" type="text" maxlength="5" placeholder="00000" inputmode="numeric" autocomplete="postal-code" />
+            </div>
+            <span class="zip-status" id="zip-status"></span>
+            <span class="row-price-unit" id="travel-price-unit">$25<span style="font-size:0.5em;opacity:0.6">/10mi</span></span>
+            <span class="row-line-total" id="travel-line-total" style="display:none"></span>
           </div>
         </div>
 
@@ -553,13 +698,12 @@
       <div class="estimate-label">Your estimate</div>
       <div class="estimate-total" id="estimate-total">$0</div>
     </div>
-    <div class="promo-wrap">
-      <input class="promo-input" id="promo-input" type="text" placeholder="Promo code" autocomplete="off" spellcheck="false" />
-      <span class="promo-status" id="promo-status"></span>
-    </div>
     <div class="estimate-actions">
-      <button class="btn-copy" id="btn-copy">Copy quote</button>
-      <button class="btn-print" id="btn-print">Print PDF</button>
+      <div class="promo-wrap" id="promo-wrap">
+        <input class="promo-input" id="promo-input" type="text" placeholder="Promo code" autocomplete="off" spellcheck="false" />
+        <span class="promo-status" id="promo-status"></span>
+      </div>
+      <button class="btn-print" id="btn-print">Save / Print quote</button>
       <a href="mailto:stefanturkowski@gmail.com" class="btn-book" style="margin:0">Book via email →</a>
     </div>
   </div>
@@ -588,9 +732,89 @@
     const PROMO_CODE = 'ilovetone';
     const PROMO_DISCOUNT = 0.8;
 
+    // ── Travel distance ───────────────────────────────────
+    const ORIGIN_LAT = 37.8716, ORIGIN_LNG = -122.2727; // 94703 Berkeley CA
+    const MAX_MILES = 100;
+    let travelMiles = 0, travelCost = 0, zipValid = false;
+
+    function haversine(lat1, lng1, lat2, lng2) {
+      const R = 3958.8;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.asin(Math.sqrt(a));
+    }
+
+    function setTravelActive(active) {
+      const row = document.getElementById('row-travel');
+      const indicator = document.getElementById('travel-indicator');
+      const lineTotal = document.getElementById('travel-line-total');
+      const priceUnit = document.getElementById('travel-price-unit');
+      row.classList.toggle('selected', active);
+      indicator.style.background = active ? 'var(--amber)' : '';
+      lineTotal.style.display = active ? 'block' : 'none';
+      lineTotal.textContent = active ? '$' + travelCost.toLocaleString() : '';
+      if (active) {
+        priceUnit.innerHTML = travelMiles + '<span style="font-size:0.5em;opacity:0.6"> mi</span>';
+        priceUnit.style.color = 'var(--amber)';
+      } else {
+        priceUnit.innerHTML = '$25<span style="font-size:0.5em;opacity:0.6">/10mi</span>';
+        priceUnit.style.color = '';
+      }
+    }
+
+    async function lookupZip(zip) {
+      const statusEl = document.getElementById('zip-status');
+      if (!/^\d{5}$/.test(zip)) {
+        travelMiles = 0; travelCost = 0; zipValid = false;
+        setTravelActive(false);
+        statusEl.textContent = '';
+        statusEl.className = 'zip-status';
+        updateTotal();
+        return;
+      }
+      statusEl.textContent = 'Looking up…';
+      statusEl.className = 'zip-status';
+      try {
+        const res = await fetch('https://api.zippopotam.us/us/' + zip);
+        if (!res.ok) throw new Error('not found');
+        const data = await res.json();
+        const lat = parseFloat(data.places[0].latitude);
+        const lng = parseFloat(data.places[0].longitude);
+        const rawMiles = haversine(ORIGIN_LAT, ORIGIN_LNG, lat, lng);
+        const city = data.places[0]['place name'] + ', ' + data.places[0]['state abbreviation'];
+        if (rawMiles > MAX_MILES) {
+          travelMiles = 0; travelCost = 0; zipValid = false;
+          setTravelActive(false);
+          statusEl.textContent = Math.round(rawMiles) + ' mi · out of range';
+          statusEl.className = 'zip-status err';
+        } else {
+          travelMiles = Math.floor(rawMiles / 10) * 10;
+          travelCost = (travelMiles / 10) * 25;
+          zipValid = true;
+          const active = travelCost > 0;
+          setTravelActive(active);
+          statusEl.textContent = active
+            ? city + ' · ' + Math.round(rawMiles) + ' mi · $' + travelCost
+            : city + ' · ' + Math.round(rawMiles) + ' mi · no charge';
+          statusEl.className = 'zip-status' + (active ? ' ok' : '');
+        }
+      } catch {
+        travelMiles = 0; travelCost = 0; zipValid = false;
+        setTravelActive(false);
+        statusEl.textContent = 'Zip not found';
+        statusEl.className = 'zip-status err';
+      }
+      updateTotal();
+    }
+
     // ── Calculator ────────────────────────────────────────
     const ITEMS = [
       { id: 'pa',        name: 'Running the PA',         unit: 'day',  rate: 500 },
+      { id: 'wireless',  name: 'Wireless Mics',          unit: 'day',  rate: 50  },
+      { id: 'lighting',  name: 'Stage Lighting',         unit: 'day',  rate: 50  },
       { id: 'rough',     name: 'Rough Mix + Raw Stems',  unit: 'set',  rate: 50  },
       { id: 'master',    name: 'Mixing & Mastering',     unit: 'song', rate: 100 },
       { id: 'youtube',   name: 'YouTube Video',          unit: 'song', rate: 100 },
@@ -611,7 +835,7 @@
     function setOn(id, on){ getRow(id).classList.toggle('selected', on); }
 
     function updateTotal() {
-      let subtotal = 0;
+      let subtotal = travelCost;
       ITEMS.forEach(item => {
         const row = getRow(item.id);
         const on  = isOn(item.id);
@@ -670,6 +894,7 @@
         setOn(item.id, nowOn);
         if (nowOn && ROUGH_DEPS.includes(item.id)) ensureRough();
         updateTotal();
+        updateAddonStatus();
       });
       row.querySelector('.row-qty').addEventListener('input', () => {
         // Clamp PA qty to minimum 1
@@ -702,77 +927,65 @@
       updateTotal();
     });
 
-    // Promo code
-    document.getElementById('promo-input').addEventListener('input', function() {
-      promoActive = this.value.trim().toLowerCase() === PROMO_CODE;
-      const statusEl = document.getElementById('promo-status');
-      if (promoActive) {
-        statusEl.textContent = '20% off applied';
-        statusEl.style.color = 'var(--amber)';
-      } else if (this.value.trim()) {
-        statusEl.textContent = 'Invalid code';
-        statusEl.style.color = 'rgba(240,234,214,0.4)';
+    // Zip code for travel
+    let zipTimer;
+    document.getElementById('zip-input').addEventListener('input', function() {
+      clearTimeout(zipTimer);
+      const val = this.value.trim();
+      if (val.length === 5) {
+        zipTimer = setTimeout(() => lookupZip(val), 400);
       } else {
-        statusEl.textContent = '';
+        lookupZip(''); // clears state immediately
       }
-      updateTotal();
+    });
+    document.getElementById('zip-input').addEventListener('click', e => e.stopPropagation());
+
+    // Promo code — activates on Enter
+    document.getElementById('promo-input').addEventListener('keydown', function(e) {
+      if (e.key !== 'Enter') return;
+      const val = this.value.trim().toLowerCase();
+      if (val === PROMO_CODE) {
+        promoActive = true;
+        document.getElementById('promo-wrap').innerHTML =
+          '<span style="font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--amber)">20% off applied</span>';
+        updateTotal();
+      } else {
+        this.value = '';
+        this.placeholder = 'Invalid code';
+        this.style.borderColor = 'rgba(240,100,100,0.5)';
+        setTimeout(() => {
+          this.placeholder = 'Promo code';
+          this.style.borderColor = '';
+        }, 1800);
+      }
     });
 
-    // Copy quote
-    document.getElementById('btn-copy').addEventListener('click', () => {
-      const lines = [];
-      const width = 36;
-      lines.push('Steezy Sound — Quote');
-      lines.push('─'.repeat(width));
-      let total = 0;
-      ITEMS.forEach(item => {
-        if (!isOn(item.id)) return;
-        const qty  = getQty(item.id);
-        const line = item.rate * qty;
-        total += line;
-        const label = item.name + (qty > 1 ? ' × ' + qty + ' ' + item.unit + (qty > 1 ? 's' : '') : '');
-        const price = '$' + line.toLocaleString();
-        const pad   = width - label.length - price.length;
-        lines.push(label + ' '.repeat(Math.max(1, pad)) + price);
-      });
-      lines.push('─'.repeat(width));
-      if (promoActive) {
-        const discountAmt = total - Math.round(total * PROMO_DISCOUNT);
-        const discLabel = 'Promo (20% off)';
-        const discPrice = '-$' + discountAmt.toLocaleString();
-        lines.push(discLabel + ' '.repeat(Math.max(1, width - discLabel.length - discPrice.length)) + discPrice);
-        const finalTotal = Math.round(total * PROMO_DISCOUNT);
-        const finalStr = '$' + finalTotal.toLocaleString();
-        lines.push('Total' + ' '.repeat(width - 5 - finalStr.length) + finalStr);
-      } else {
-        lines.push('Total' + ' '.repeat(width - 5 - ('$' + total.toLocaleString()).length) + '$' + total.toLocaleString());
-      }
-      lines.push('');
-      lines.push('Book: stefanturkowski@gmail.com');
-      lines.push('steezysound.com');
-
-      navigator.clipboard.writeText(lines.join('\n')).then(() => {
-        const fb = document.getElementById('copy-feedback');
-        fb.classList.add('show');
-        setTimeout(() => fb.classList.remove('show'), 2000);
-      }).catch(() => {
-        // Fallback for older browsers
-        const ta = document.createElement('textarea');
-        ta.value = lines.join('\n');
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        const fb = document.getElementById('copy-feedback');
-        fb.classList.add('show');
-        setTimeout(() => fb.classList.remove('show'), 2000);
-      });
+    // PA add-ons toggle
+    document.getElementById('addon-toggle').addEventListener('click', () => {
+      const toggle = document.getElementById('addon-toggle');
+      const subrows = document.getElementById('addon-subrows');
+      const open = toggle.classList.toggle('open');
+      subrows.classList.toggle('open', open);
     });
+
+    function updateAddonStatus() {
+      const activeCount = ['wireless', 'lighting'].filter(id => isOn(id)).length;
+      const statusEl = document.getElementById('addon-toggle-status');
+      statusEl.textContent = activeCount > 0 ? activeCount + ' selected' : '';
+    }
 
     // Print PDF — only selected items + total
     document.getElementById('btn-print').addEventListener('click', () => {
+      if (!zipValid) {
+        showWarning('Enter a valid zip code first');
+        document.getElementById('zip-input').focus();
+        return;
+      }
       const rows = [];
       let total = 0;
+      const travelLabel = travelMiles > 0 ? 'Travel (' + travelMiles + ' mi)' : 'Travel (local — no charge)';
+      rows.push({ name: travelLabel, qty: 1, unit: 'trip', rate: travelCost, line: travelCost });
+      total += travelCost;
       ITEMS.forEach(item => {
         if (!isOn(item.id)) return;
         const qty  = getQty(item.id);
@@ -784,9 +997,9 @@
       const rowsHtml = rows.map(r => `
         <tr>
           <td>${r.name}</td>
-          <td>${r.qty} ${r.unit}${r.qty > 1 ? 's' : ''}</td>
-          <td>$${r.rate.toLocaleString()}</td>
-          <td>$${r.line.toLocaleString()}</td>
+          <td>${r.qty > 1 ? r.qty + ' ' + r.unit + 's' : r.unit}</td>
+          <td>${r.rate > 0 ? '$' + r.rate.toLocaleString() : '—'}</td>
+          <td>${r.line > 0 ? '$' + r.line.toLocaleString() : 'No charge'}</td>
         </tr>`).join('');
 
       const win = window.open('', '_blank');
