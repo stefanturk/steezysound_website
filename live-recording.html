@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Live Shows — Steezy Sound</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -227,6 +227,7 @@
         <li>Prompt timing, professional communications, and rock solid sound for any venue</li>
         <li>Optional add-ons include rought set mix as one MP3, and Multitrack WAVs. Delivery within 24 hours</li>
         <li>Other add-ons include professional audio and video mixing for distribution. Delivered within a week</li>
+        <li>Plug in your phone or laptop for background music between sets — stereo inputs available for DJs</li>
       </ul>
     </div>
 
@@ -263,6 +264,9 @@
         <a href="menu.html" style="display:block;margin-top:0.8rem;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber-dim);text-decoration:none;">
           ← Build your own on The Menu
         </a>
+        <p style="font-size:0.72rem;letter-spacing:0.12em;line-height:1.7;color:rgba(240,234,214,0.45);margin-top:0.8rem">
+          Planning a wedding? <a href="mailto:stefanturkowski@gmail.com?subject=Wedding Inquiry" style="color:var(--amber-dim);text-decoration:none;">Email for a custom quote</a> — weddings need extra coordination for ceremony, speeches, and timing.
+        </p>
       </div>
 
       <!-- REPLACE: update email address -->
@@ -305,9 +309,11 @@
     // Parallax
     (function() {
       const update = () => {
-        document.querySelectorAll('.service-hero-bg').forEach(bg => {
-          bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
-        });
+        if (window.innerWidth > 800) {
+          document.querySelectorAll('.service-hero-bg').forEach(bg => {
+            bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+          });
+        }
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
@@ -315,7 +321,13 @@
           bg.style.backgroundPositionY = `calc(${baseY} + ${offset}px)`;
         });
       };
-      window.addEventListener('scroll', update, { passive: true });
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => { update(); ticking = false; });
+          ticking = true;
+        }
+      }, { passive: true });
       update();
     })();
   </script>

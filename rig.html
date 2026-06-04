@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>The Rig — Steezy Sound</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -520,7 +520,9 @@
     // Parallax
     (function() {
       const update = () => {
-        document.querySelector('.rig-bg').style.backgroundPositionY = `calc(50% - ${window.scrollY * 0.35}px)`;
+        if (window.innerWidth > 800) {
+          document.querySelector('.rig-bg').style.backgroundPositionY = `calc(50% - ${window.scrollY * 0.35}px)`;
+        }
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
@@ -528,7 +530,13 @@
           bg.style.backgroundPositionY = `calc(${baseY} + ${offset}px)`;
         });
       };
-      window.addEventListener('scroll', update, { passive: true });
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => { update(); ticking = false; });
+          ticking = true;
+        }
+      }, { passive: true });
       update();
     })();
   </script>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&display=block');
 
 :root {
   --black: #080808;
@@ -68,6 +68,7 @@ body::after {
 .nav-wordmark {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 2.1rem; letter-spacing: 0.07em; color: var(--cream);
+  white-space: nowrap;
 }
 
 .nav-links { display: flex; align-items: center; gap: 2.5rem; }
@@ -77,6 +78,7 @@ body::after {
   color: var(--cream); text-decoration: none; background: none; border: none;
   font-family: inherit; cursor: pointer; padding: 0;
   transition: color 0.2s; display: flex; align-items: center; gap: 0.3em;
+  white-space: nowrap;
 }
 .nav-link:hover, .nav-link.active { color: var(--amber); }
 
@@ -159,4 +161,15 @@ body::after {
   .nav-links { gap: 1.5rem; }
   .nav-link { font-size: 0.75rem; }
   .site-footer { flex-direction: column; gap: 0.4rem; }
+}
+
+@media (max-width: 800px) {
+  @keyframes bg-pan-x {
+    0%, 100% { background-position-x: 30%; }
+    50%       { background-position-x: 70%; }
+  }
+  .service-hero-bg,
+  .hero-bg {
+    animation: bg-pan-x 60s ease-in-out infinite;
+  }
 }

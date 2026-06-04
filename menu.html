@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Menu — Steezy Sound</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -319,8 +319,45 @@
       pointer-events: none;
     }
 
+    /* ─── WEDDING NOTE ──────────────────────────────────── */
+    .wedding-note {
+      padding: 2rem 3.5rem;
+      border-top: 1px solid rgba(232,160,32,0.12);
+      display: flex; flex-direction: column; gap: 0.8rem;
+      max-width: 600px;
+    }
+    .wedding-note p {
+      font-size: 0.85rem; letter-spacing: 0.1em; line-height: 1.8;
+      color: rgba(240,234,214,0.6);
+    }
+    .wedding-link {
+      font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--amber-dim); text-decoration: none;
+    }
+    .wedding-link:hover { color: var(--amber); }
+
+    /* ─── PROMO CODE ────────────────────────────────────── */
+    .promo-wrap {
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .promo-input {
+      background: rgba(232,160,32,0.06);
+      border: 1px solid rgba(232,160,32,0.2);
+      color: var(--cream);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 0.5rem 0.9rem; width: 9rem;
+      transition: border-color 0.2s;
+    }
+    .promo-input:focus { outline: none; border-color: var(--amber); }
+    .promo-status {
+      font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+      min-width: 8rem;
+    }
+
     /* ─── MOBILE ────────────────────────────────────────── */
     @media (max-width: 640px) {
+      .wedding-note { padding: 2rem 1.5rem; }
       .menu-header {
         flex-direction: column;
         align-items: flex-start;
@@ -483,6 +520,13 @@
       <div class="calc-spacer"></div>
     </div>
 
+    <!-- WEDDING NOTE -->
+    <div class="wedding-note">
+      <span class="section-label">Planning a wedding?</span>
+      <p>Weddings need a more customized quote — ceremonies, speeches, walk-in music, and room setups all vary. Email us and we'll work out the details together.</p>
+      <a href="mailto:stefanturkowski@gmail.com?subject=Wedding Inquiry" class="wedding-link">Email for a wedding quote →</a>
+    </div>
+
     <!-- MENU FOOTER -->
     <div class="menu-foot">
       <p class="menu-foot-text">Add-ons can be decided after the show · rough mix and stems within 24 hrs · produced songs and videos within a week</p>
@@ -508,6 +552,10 @@
     <div>
       <div class="estimate-label">Your estimate</div>
       <div class="estimate-total" id="estimate-total">$0</div>
+    </div>
+    <div class="promo-wrap">
+      <input class="promo-input" id="promo-input" type="text" placeholder="Promo code" autocomplete="off" spellcheck="false" />
+      <span class="promo-status" id="promo-status"></span>
     </div>
     <div class="estimate-actions">
       <button class="btn-copy" id="btn-copy">Copy quote</button>
@@ -535,6 +583,11 @@
       });
     });
 
+    // ── Promo code ────────────────────────────────────────
+    let promoActive = false;
+    const PROMO_CODE = 'ilovetone';
+    const PROMO_DISCOUNT = 0.8;
+
     // ── Calculator ────────────────────────────────────────
     const ITEMS = [
       { id: 'pa',        name: 'Running the PA',         unit: 'day',  rate: 500 },
@@ -558,16 +611,22 @@
     function setOn(id, on){ getRow(id).classList.toggle('selected', on); }
 
     function updateTotal() {
-      let total = 0;
+      let subtotal = 0;
       ITEMS.forEach(item => {
         const row = getRow(item.id);
         const on  = isOn(item.id);
         const qty = parseInt(row.querySelector('.row-qty').value) || 1;
         const line = on ? item.rate * qty : 0;
         row.querySelector('.row-line-total').textContent = on ? '$' + line.toLocaleString() : '';
-        total += line;
+        subtotal += line;
       });
-      document.getElementById('estimate-total').textContent = '$' + total.toLocaleString();
+      const total = promoActive ? Math.round(subtotal * PROMO_DISCOUNT) : subtotal;
+      const totalEl = document.getElementById('estimate-total');
+      if (promoActive && subtotal > 0) {
+        totalEl.innerHTML = `<span style="text-decoration:line-through;opacity:0.4;font-size:0.7em">$${subtotal.toLocaleString()}</span> $${total.toLocaleString()}`;
+      } else {
+        totalEl.textContent = '$' + total.toLocaleString();
+      }
       return total;
     }
 
@@ -643,6 +702,22 @@
       updateTotal();
     });
 
+    // Promo code
+    document.getElementById('promo-input').addEventListener('input', function() {
+      promoActive = this.value.trim().toLowerCase() === PROMO_CODE;
+      const statusEl = document.getElementById('promo-status');
+      if (promoActive) {
+        statusEl.textContent = '20% off applied';
+        statusEl.style.color = 'var(--amber)';
+      } else if (this.value.trim()) {
+        statusEl.textContent = 'Invalid code';
+        statusEl.style.color = 'rgba(240,234,214,0.4)';
+      } else {
+        statusEl.textContent = '';
+      }
+      updateTotal();
+    });
+
     // Copy quote
     document.getElementById('btn-copy').addEventListener('click', () => {
       const lines = [];
@@ -661,7 +736,17 @@
         lines.push(label + ' '.repeat(Math.max(1, pad)) + price);
       });
       lines.push('─'.repeat(width));
-      lines.push('Total' + ' '.repeat(width - 5 - ('$' + total.toLocaleString()).length) + '$' + total.toLocaleString());
+      if (promoActive) {
+        const discountAmt = total - Math.round(total * PROMO_DISCOUNT);
+        const discLabel = 'Promo (20% off)';
+        const discPrice = '-$' + discountAmt.toLocaleString();
+        lines.push(discLabel + ' '.repeat(Math.max(1, width - discLabel.length - discPrice.length)) + discPrice);
+        const finalTotal = Math.round(total * PROMO_DISCOUNT);
+        const finalStr = '$' + finalTotal.toLocaleString();
+        lines.push('Total' + ' '.repeat(width - 5 - finalStr.length) + finalStr);
+      } else {
+        lines.push('Total' + ' '.repeat(width - 5 - ('$' + total.toLocaleString()).length) + '$' + total.toLocaleString());
+      }
       lines.push('');
       lines.push('Book: stefanturkowski@gmail.com');
       lines.push('steezysound.com');

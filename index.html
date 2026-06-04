@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Steezy Sound</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -251,7 +251,7 @@
     <div class="hero-content">
       <h1 class="hero-wordmark">Steezy<span>Sound</span></h1>
       <p class="hero-discipline">Audio &amp; Video Production</p>
-      <p class="hero-tagline">We capture the energy. You own the moment.</p>
+      <p class="hero-tagline">You own the moment. We capture the energy.</p>
       <a href="mailto:stefanturkowski@gmail.com" class="btn-book">Book via email &nbsp;→</a>
     </div>
     <div class="hero-scroll" aria-hidden="true">
@@ -363,9 +363,11 @@
     // Parallax
     (function() {
       const update = () => {
-        document.querySelectorAll('.hero-bg').forEach(bg => {
-          bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
-        });
+        if (window.innerWidth > 800) {
+          document.querySelectorAll('.hero-bg').forEach(bg => {
+            bg.style.backgroundPositionY = `calc(50% + ${window.scrollY * 0.35}px)`;
+          });
+        }
         document.querySelectorAll('.texture-band-bg').forEach(bg => {
           const r = bg.parentElement.getBoundingClientRect();
           const offset = (r.top + r.height / 2 - window.innerHeight / 2) * 0.35;
@@ -373,7 +375,13 @@
           bg.style.backgroundPositionY = `calc(${baseY} + ${offset}px)`;
         });
       };
-      window.addEventListener('scroll', update, { passive: true });
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => { update(); ticking = false; });
+          ticking = true;
+        }
+      }, { passive: true });
       update();
     })();
   </script>
