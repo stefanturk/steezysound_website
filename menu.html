@@ -208,6 +208,10 @@
       color: var(--amber); letter-spacing: 0.04em;
     }
 
+    .estimate-left {
+      display: flex; align-items: center; gap: 1.5rem;
+    }
+
     .estimate-actions {
       display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
     }
@@ -376,6 +380,7 @@
     /* Travel row — activated by zip, not click */
     #row-travel:hover { background: none; }
     #row-travel.selected { background: rgba(232,160,32,0.04); }
+    #row-travel.selected .row-name { color: var(--cream); }
 
     /* Zip input */
     .zip-wrap { display: flex; align-items: center; gap: 0.5rem; }
@@ -593,7 +598,7 @@
             <div class="row-indicator"></div>
             <div class="row-info">
               <span class="row-name">Rough Mix + Raw Stems</span>
-              <span class="row-desc">Full set as one mixed MP3 · multitrack stems within 24hrs — included free with this</span>
+              <span class="row-desc">Full set as one mixed MP3 · multitrack stems — required for line items below</span>
             </div>
           </div>
           <div class="row-right">
@@ -611,7 +616,7 @@
             <div class="row-indicator"></div>
             <div class="row-info">
               <span class="row-name">Mixing &amp; Mastering</span>
-              <span class="row-desc">Individual WAV files per song · distribution-ready · delivered within a week</span>
+              <span class="row-desc">Individual WAV files per song · distribution-ready</span>
             </div>
           </div>
           <div class="row-right">
@@ -629,7 +634,7 @@
             <div class="row-indicator"></div>
             <div class="row-info">
               <span class="row-name">YouTube Video</span>
-              <span class="row-desc">Horizontal multi-cam · mixed audio · titles and transitions · delivered within a week</span>
+              <span class="row-desc">Horizontal multi-cam · mixed audio · titles and transitions</span>
             </div>
           </div>
           <div class="row-right">
@@ -647,7 +652,7 @@
             <div class="row-indicator"></div>
             <div class="row-info">
               <span class="row-name">Instagram Reel</span>
-              <span class="row-desc">30 sec vertical · mixed audio · lyric subtitles and effects · delivered within a week</span>
+              <span class="row-desc">30 sec vertical · mixed audio · lyric subtitles and effects</span>
             </div>
           </div>
           <div class="row-right">
@@ -694,15 +699,17 @@
 
   <!-- Sticky estimate bar -->
   <div class="estimate-bar" id="estimate-bar">
-    <div>
-      <div class="estimate-label">Your estimate</div>
-      <div class="estimate-total" id="estimate-total">$0</div>
-    </div>
-    <div class="estimate-actions">
+    <div class="estimate-left">
+      <div>
+        <div class="estimate-label">Your estimate</div>
+        <div class="estimate-total" id="estimate-total">$0</div>
+      </div>
       <div class="promo-wrap" id="promo-wrap">
         <input class="promo-input" id="promo-input" type="text" placeholder="Promo code" autocomplete="off" spellcheck="false" />
         <span class="promo-status" id="promo-status"></span>
       </div>
+    </div>
+    <div class="estimate-actions">
       <button class="btn-print" id="btn-print">Save / Print quote</button>
       <a href="mailto:stefanturkowski@gmail.com" class="btn-book" style="margin:0">Book via email →</a>
     </div>
