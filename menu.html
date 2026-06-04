@@ -680,7 +680,6 @@
     <!-- MENU FOOTER -->
     <div class="menu-foot">
       <p class="menu-foot-text">Add-ons can be decided after the show · rough mix and stems within 24 hrs · produced songs and videos within a week</p>
-      <!-- REPLACE: update email address -->
       <a href="mailto:stefanturkowski@gmail.com" class="btn-book">
         Get in touch &nbsp;→
       </a>
@@ -875,7 +874,7 @@
       const fb = document.getElementById('copy-feedback');
       fb.textContent = msg;
       fb.classList.add('show');
-      setTimeout(() => { fb.classList.remove('show'); fb.textContent = 'Copied!'; }, 2500);
+      setTimeout(() => { fb.classList.remove('show'); fb.textContent = ''; }, 2500);
     }
 
     function roughIsRequired() {
@@ -989,17 +988,18 @@
         return;
       }
       const rows = [];
-      let total = 0;
+      let subtotal = 0;
       const travelLabel = travelMiles > 0 ? 'Travel (' + travelMiles + ' mi)' : 'Travel (local — no charge)';
       rows.push({ name: travelLabel, qty: 1, unit: 'trip', rate: travelCost, line: travelCost });
-      total += travelCost;
+      subtotal += travelCost;
       ITEMS.forEach(item => {
         if (!isOn(item.id)) return;
         const qty  = getQty(item.id);
         const line = item.rate * qty;
-        total += line;
+        subtotal += line;
         rows.push({ name: item.name, qty, unit: item.unit, rate: item.rate, line });
       });
+      const total = promoActive ? Math.round(subtotal * PROMO_DISCOUNT) : subtotal;
 
       const rowsHtml = rows.map(r => `
         <tr>
@@ -1008,6 +1008,10 @@
           <td>${r.rate > 0 ? '$' + r.rate.toLocaleString() : '—'}</td>
           <td>${r.line > 0 ? '$' + r.line.toLocaleString() : 'No charge'}</td>
         </tr>`).join('');
+
+      const promoRow = promoActive
+        ? `<tr><td>Promo discount (20% off)</td><td></td><td></td><td>−$${(subtotal - total).toLocaleString()}</td></tr>`
+        : '';
 
       const win = window.open('', '_blank');
       win.document.write(`<!DOCTYPE html><html><head><title>Steezy Sound — Quote</title><style>
@@ -1028,6 +1032,7 @@
           <thead><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Total</th></tr></thead>
           <tbody>
             ${rowsHtml}
+            ${promoRow}
             <tr class="total-row"><td colspan="3">Total</td><td>$${total.toLocaleString()}</td></tr>
           </tbody>
         </table>
