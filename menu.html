@@ -464,7 +464,10 @@
       <img src="media/logo.png" alt="Steezy Sound" class="nav-frog" />
       <span class="nav-wordmark">Steezy Sound</span>
     </a>
-    <div class="nav-links">
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
       <div class="nav-dropdown">
         <button class="nav-link" aria-haspopup="true" aria-expanded="false">Services ▾</button>
         <div class="dropdown-menu">
@@ -718,6 +721,15 @@
   <div class="copy-feedback" id="copy-feedback">Copied!</div>
 
   <script>
+    // ── Hamburger ─────────────────────────────────────────
+    const hamburger = document.getElementById('nav-hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger?.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = navLinks.classList.toggle('mobile-open');
+      hamburger.classList.toggle('open', open);
+    });
+
     // ── Nav dropdown ──────────────────────────────────────
     document.querySelectorAll('.nav-dropdown').forEach(dd => {
       dd.querySelector('button')?.addEventListener('click', e => {
@@ -727,6 +739,8 @@
       });
     });
     document.addEventListener('click', () => {
+      navLinks?.classList.remove('mobile-open');
+      hamburger?.classList.remove('open');
       document.querySelectorAll('.nav-dropdown').forEach(dd => {
         dd.classList.remove('open');
         dd.querySelector('button')?.setAttribute('aria-expanded', 'false');

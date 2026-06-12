@@ -152,14 +152,59 @@ body::after {
 }
 .btn-book:hover { background: var(--cream); transform: translateX(4px); }
 
+/* ─── HAMBURGER ─────────────────────────────────────────── */
+
+.nav-hamburger {
+  display: none;
+  flex-direction: column; justify-content: center; align-items: center;
+  gap: 5px; width: 36px; height: 36px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--cream); border-radius: 1px;
+  transition: transform 0.22s, opacity 0.22s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
 /* ─── MOBILE ────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
   .nav { padding: 0.9rem 1.5rem; }
   .nav-wordmark { font-size: 1.5rem; }
   .nav-frog { width: 40px; height: 40px; }
-  .nav-links { gap: 1.5rem; }
-  .nav-link { font-size: 0.75rem; }
+  .nav-hamburger { display: flex; }
+
+  .nav-links {
+    display: none;
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: rgba(8,8,8,0.98);
+    border-bottom: 1px solid rgba(232,160,32,0.15);
+  }
+  .nav-links.mobile-open { display: flex; }
+
+  .nav-link {
+    font-size: 0.82rem; letter-spacing: 0.2em;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(232,160,32,0.06);
+    justify-content: space-between;
+  }
+
+  .nav-dropdown { position: static; }
+  .nav-dropdown .dropdown-menu {
+    position: static; top: auto; right: auto;
+    opacity: 1; visibility: visible; transform: none;
+    background: rgba(232,160,32,0.04);
+    border: none; border-bottom: 1px solid rgba(232,160,32,0.06);
+    min-width: unset;
+    display: none;
+  }
+  .nav-dropdown.open .dropdown-menu { display: block; }
+  .dropdown-item { padding: 0.85rem 2.5rem; font-size: 0.78rem; }
+
   .site-footer { flex-direction: column; gap: 0.4rem; }
 }
 
